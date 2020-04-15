@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using NUnit.Framework;
 using Unity.Labs.MARS;
@@ -22,7 +23,6 @@ namespace Tests
         public void TearDown()
         {
             
-
         }
 
         [Test]
@@ -45,32 +45,29 @@ namespace Tests
             
             using (var window = new AutomatedWindow<MARSPanel>(marsPanel) )
             {
-                //var commonAncestorElement = window.FindElementsByGUIStyle(new GUIStyle()).First().nextSibling;
 
 
+                var tex = new Texture2D(2, 2, TextureFormat.DXT5, false);
+                byte[] file;
+                file = File.ReadAllBytes("Packages/com.unity.labs.mars/Editor/Icons/Create/Dark/Proxy.png");
+                tex.LoadImage(file);
+                tex.name = "Proxy";
 
-                var content = new GUIContent();
-                //content.image = new Texture2D();
-                content.text = "Proxy Object";
-                content.tooltip = "A GameObject representing a proxy for an object in the real world.";
-                var primitivesSection = window.FindElementsByGUIContent(content).ToArray();
-                // var a = window.FindElementsByNamedControl("Proxy Object").ToArray();
-                // var m_style = new GUIStyle();
-                // m_style.name = "button";
-                // var b = window.FindElementsByGUIStyle(m_style).ToArray();
-                
+                var content = new GUIContent(
+                    "Proxy Object",
+                    tex,
+                    "A GameObject representing a proxy for an object in the real world."
+                    );
 
-                //window.Click(primitivesSection);
+                var proxyButton = window.FindElementsByGUIContent(content).ToArray().FirstOrDefault();
+                window.Click(proxyButton);
                 window.window.RepaintImmediately();
-                //var proxy = window.FindElementsByGUIContent(new GUIContent("Proxy Object")).ToArray().FirstOrDefault();
-                var asdf = "";
-                //var marsSession = window.FindElementsByGUIContent(new GUIContent("MARS Session")).ToArray().FirstOrDefault();
-                //Assert.NotNull(marsSession, "No Mars Session was found");
+
             }
             
             
-            //var goAll = Resources.FindObjectsOfTypeAll(typeof(GameObject)).ToList();
-            //Assert.IsTrue(goAll.Find(x => x.name == "Proxy Object"));
+            var goAll = Resources.FindObjectsOfTypeAll(typeof(GameObject)).ToList();
+            Assert.IsTrue(goAll.Find(x => x.name == "Proxy Object"));
         }
 
         // A UnityTest behaves like a coroutine in Play Mode. In Edit Mode you can use
