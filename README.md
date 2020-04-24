@@ -1,4 +1,5 @@
 # com.unity.xrtools.mars-viking
+Named after NASA's Viking project which became the first US mission to land a spacecraft on the surface of MARS and return photographs of the surface.
 
 ## Setup
 1. Create a new Unity project
