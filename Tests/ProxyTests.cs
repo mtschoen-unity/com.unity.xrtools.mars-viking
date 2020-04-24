@@ -1,6 +1,4 @@
 ﻿using System.Collections;
-using System.Collections.Generic;
-using System.IO;
 using System.Linq;
 using NUnit.Framework;
 using Unity.Labs.MARS;
@@ -16,7 +14,7 @@ namespace Tests
         [SetUp]
         public void SetUp()
         {
-            EditorApplication.ExecuteMenuItem("Window/Layouts/Default");
+            //EditorApplication.ExecuteMenuItem("Window/Layouts/Default");
         }
         
         [TearDown]
@@ -43,23 +41,16 @@ namespace Tests
             Assert.That(marsPanel, Is.Not.Null,
                 "Could not open the MARS panel from the Window MenuItem");
             
-            using (var window = new AutomatedWindow<MARSPanel>(marsPanel) )
+            using (var window = new MarsAutomatedWindow<MARSPanel>(marsPanel) )
             {
-
-
-                var tex = new Texture2D(2, 2, TextureFormat.DXT5, false);
-                byte[] file;
-                file = File.ReadAllBytes("Packages/com.unity.labs.mars/Editor/Icons/Create/Dark/Proxy.png");
-                tex.LoadImage(file);
-                tex.name = "Proxy";
 
                 var content = new GUIContent(
                     "Proxy Object",
-                    tex,
-                    "A GameObject representing a proxy for an object in the real world."
+                "A GameObject representing a proxy for an object in the real world."
                     );
 
                 var proxyButton = window.FindElementsByGUIContent(content).ToArray().FirstOrDefault();
+
                 window.Click(proxyButton);
                 window.window.RepaintImmediately();
 
@@ -68,6 +59,7 @@ namespace Tests
             
             var goAll = Resources.FindObjectsOfTypeAll(typeof(GameObject)).ToList();
             Assert.IsTrue(goAll.Find(x => x.name == "Proxy Object"));
+            Assert.IsTrue(goAll.Find(x => x.name == "MARS Session"));
         }
 
         // A UnityTest behaves like a coroutine in Play Mode. In Edit Mode you can use
