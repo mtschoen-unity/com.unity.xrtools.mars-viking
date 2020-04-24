@@ -1,20 +1,19 @@
-﻿using System.Collections;
-using System.Linq;
+﻿using System.Linq;
 using NUnit.Framework;
 using Unity.Labs.MARS;
 using UnityEditor;
 using UnityEngine;
-using UnityEngine.TestTools;
 using UnityEditor.UIAutomation;
 
-namespace Tests
+// ReSharper disable once CheckNamespace
+namespace MARSVikingTests
 {
     public class ProxyTests
     {
         [SetUp]
         public void SetUp()
         {
-            //EditorApplication.ExecuteMenuItem("Window/Layouts/Default");
+            
         }
         
         [TearDown]
@@ -24,51 +23,44 @@ namespace Tests
         }
 
         [Test]
+        [Category("Acceptance")]
+        [NUnit.Framework.Property("TestRailId", "C576069")]
         public void CanCreateProxyFromGameObjectMenu()
         {
-            EditorApplication.ExecuteMenuItem("GameObject/MARS/Proxy Object");
+            EditorApplication.ExecuteMenuItem(Constants.MarsGameObjectMenu.ProxyMenuPath);
             var goAll = Resources.FindObjectsOfTypeAll(typeof(GameObject)).ToList();
-            Assert.IsTrue(goAll.Find(x => x.name == "Proxy Object"));
+            Assert.IsTrue(goAll.Find(x => x.name == Constants.HierarchyPanel.ProxyGameObjectName));
         }
         
         [Test]
-        public void CanCreateProxyFromMarsPanelMenu()
+        [Category("Acceptance")]
+        [NUnit.Framework.Property("TestRailId", "C573635")]
+        public void CanCreateProxyFromMarsPanel()
         {
 
-            EditorApplication.ExecuteMenuItem("Window/MARS/MARS Panel");
+            EditorApplication.ExecuteMenuItem(Constants.WindowsMenu.MarsPanelPath);
             EditorApplication.RequestRepaintAllViews();
             var marsPanel = Resources.FindObjectsOfTypeAll<MARSPanel>().FirstOrDefault();
             Assert.That(marsPanel, Is.Not.Null,
-                "Could not open the MARS panel from the Window MenuItem");
+                Constants.AssertionErrorMessages.NoMarsPanel);
             
             using (var window = new MarsAutomatedWindow<MARSPanel>(marsPanel) )
             {
-
                 var content = new GUIContent(
-                    "Proxy Object",
-                "A GameObject representing a proxy for an object in the real world."
+                    Constants.MarsPanel.ProxyButtonText,
+                    Constants.MarsPanel.ProxyButtonTooltip
                     );
 
                 var proxyButton = window.FindElementsByGUIContent(content).ToArray().FirstOrDefault();
 
                 window.Click(proxyButton);
                 window.window.RepaintImmediately();
-
             }
             
             
             var goAll = Resources.FindObjectsOfTypeAll(typeof(GameObject)).ToList();
-            Assert.IsTrue(goAll.Find(x => x.name == "Proxy Object"));
-            Assert.IsTrue(goAll.Find(x => x.name == "MARS Session"));
-        }
-
-        // A UnityTest behaves like a coroutine in Play Mode. In Edit Mode you can use
-        // `yield return null;` to skip a frame.
-        [UnityTest]
-        public IEnumerator ATest()
-        {
-            
-            yield return null;
+            Assert.IsTrue(goAll.Find(x => x.name == Constants.HierarchyPanel.ProxyGameObjectName));
+            Assert.IsTrue(goAll.Find(x => x.name == Constants.HierarchyPanel.MarsSessionGameObjectName));
         }
     }
 }
