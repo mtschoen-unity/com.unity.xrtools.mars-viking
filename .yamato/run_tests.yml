@@ -1,0 +1,64 @@
+Windows_Tests:
+  name: Windows 2019.3.0f6 Tests
+  agent:
+    type: Unity::VM
+    flavor: b1.large
+    image: package-ci/win10:stable
+  commands:
+    - npm pack
+    - unity-downloader-cli -b 2019.3.0f6 -c Editor --wait --published-only
+    - .Editor\Unity.exe -createProject C:\build\output\UnityLabs\com.unity.xrtools.mars-viking\testProject -batchmode -quit
+    - move *.tgz testProject\Packages\
+    - curl -s https://artifactory.internal.unity3d.com/core-automation/tools/utr-standalone/utr.bat --output utr.bat
+    - utr --suite=editor --suite=playmode --testproject=C:\build\output\UnityLabs\com.unity.xrtools.mars-viking/testProject --editor-location=C:\build\output\UnityLabs\com.unity.xrtools.mars-viking\.Editor --artifacts_path=C:\build\output\UnityLabs\com.unity.xrtools.mars-viking\test_results
+  artifacts:
+    test_results:
+      paths:
+        - "test_results/*/**"
+  triggers:
+    pull_requests:
+      - targets:
+          only:
+            - "master"
+
+MacOS_Tests:
+  name: MacOS 2019.3.0f6 Tests
+  agent:
+    type: Unity::VM::osx
+    image: package-ci/mac:stable
+    flavor: m1.mac
+  commands:
+    - npm pack
+    - unity-downloader-cli -b 2019.3.0f6 -c Editor --wait --published-only
+    - Unity.app/Contents/MacOS/Unity -createProject /Users/bokken/build/output/UnityLabs/com.unity.xrtools.mars-viking/testProject -batchmode -quit
+    - mv *.tgz testProject/Packages
+    - curl -s https://artifactory.internal.unity3d.com/core-automation/tools/utr-standalone/utr --output utr
+    - chmod +x utr
+    - ./utr --suite=editor --suite=playmode --testproject=/Users/bokken/build/output/UnityLabs/com.unity.xrtools.mars-viking/testProject --editor-location=/Users/bokken/build/output/UnityLabs/com.unity.xrtools.mars-viking/.Editor --artifacts_path=/Users/bokken/build/output/UnityLabs/com.unity.xrtools.mars-viking/test_results
+  artifacts:
+    test_results:
+      paths:
+        - "test_results/*/**"
+  triggers:
+    pull_requests:
+      - targets:
+          only:
+            - "master"
+
+Test_Trigger:
+  name: Tests Trigger
+  agent:
+    type: Unity::VM
+    image: package-ci/win10:stable
+    flavor: b1.large
+  commands:
+    - dir
+  triggers:
+    branches:
+      only:
+      - /.*/
+  dependencies:
+    - .yamato/run_tests.yml#Windows_Tests
+    - .yamato/run_tests.yml#MacOS_Tests
+
+
