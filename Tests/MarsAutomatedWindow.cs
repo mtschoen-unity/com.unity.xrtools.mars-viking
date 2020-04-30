@@ -486,7 +486,7 @@ namespace UnityEditor.UIAutomation
 
         public IEnumerable<IAutomatedUIElement> FindElementsByGUIStyle(GUIStyle style)
         {
-            return FindElements(element => element.style == style);
+            return FindElements(element => GUIStyleAreEqual(element.style, style));
         }
 
         public IEnumerable<IAutomatedUIElement> FindElementsByNamedControl(string controlName)
@@ -497,6 +497,23 @@ namespace UnityEditor.UIAutomation
         private static string NullOrEmptyToNull(string input)
         {
             return string.IsNullOrEmpty(input) ? null : input;
+        }
+
+        private static bool GUIStyleAreEqual(GUIStyle content1, GUIStyle content2)
+        {
+            // TODO: Review this logic.  Does it make sense?
+            if (content1 == null || content2 == null)
+                return false;
+            
+            if (content1 == content2)
+                return true;
+            
+            if (content1.name == content2.name) 
+                return true;
+
+            // The native string type UTF16String does not differentiate between empty and null strings
+            // Empty and null strings are considered equal here to work around this issue
+            return NullOrEmptyToNull(content1.name) == NullOrEmptyToNull(content2.name);
         }
 
         private static bool GUIContentsAreEqual(GUIContent content1, GUIContent content2)
