@@ -33,3 +33,14 @@ Each test should also make use of the Category Nunit Attribute so that we can ru
 
 ### Constants
 Each test should make use of constants for location paths, text and any other GUI Elements used in a test.  The idea here is to have one location for all strings which can be reused.  It also makes modifications easy when a change takes place in the application under test.
+
+## Running Tests
+Running tests should be done by using the UTR standalone.
+
+### Download UTR
+The tool can be downloaded by using the script found in (this)[https://github.cds.internal.unity3d.com/unity/utr] repository.  Instructions can be found in the README.
+
+### Run locally
+```
+utr --suite=editor --suite=playmode --testproject=/my/project/path --editor-location=/Applications/Unity/Hub/Editor/2019.3.0f6/ --artifacts_path=/my/test/results/path
+```
