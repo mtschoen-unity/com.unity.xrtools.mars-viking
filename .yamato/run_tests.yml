@@ -34,7 +34,7 @@ MacOS_Tests:
     - unity-downloader-cli -u 2019.3.0f6 -c Editor --wait --published-only
     - .Editor/Unity.app/Contents/MacOS/Unity -createProject /Users/bokken/build/output/jasons-unity/com.unity.xrtools.mars-viking/testProject -batchmode -quit
     - npm install -g json
-    - json -I -f C:\build\output\jasons-unity\com.unity.xrtools.mars-viking\testProject\Packages\manifest.json -e "this.registry='https://artifactory.prd.cds.internal.unity3d.com/artifactory/api/npm/upm-candidates'"
+    - json -I -f /Users/bokken/build/output/jasons-unity/com.unity.xrtools.mars-viking/testProject/Packages/manifest.json -e "this.registry='https://artifactory.prd.cds.internal.unity3d.com/artifactory/api/npm/upm-candidates'"
     - git clone git@github.com:jasons-unity/com.unity.xrtools.mars-viking.git /Users/bokken/build/output/jasons-unity/com.unity.xrtools.mars-viking/testProject/Packages/com.unity.xrtools.mars-viking && cd /Users/bokken/build/output/jasons-unity/com.unity.xrtools.mars-viking/testProject/Packages/com.unity.xrtools.mars-viking && git checkout $GIT_BRANCH
     - curl -s https://artifactory.internal.unity3d.com/core-automation/tools/utr-standalone/utr --output utr
     - chmod +x utr
