@@ -15,18 +15,25 @@ public static class Constants
 
     public static class MarsGameObjectMenu
     {
-        private const string GameObjectPath = "GameObject/MARS";
-        public const string ProxyMenuPath = GameObjectPath + "/Proxy Object";
+        private const string GameObjectPath = "GameObject";
+        public const string ProxyMenuPath = GameObjectPath + "/MARS/Proxy Object";
     }
 
     public static class WindowsMenu
     {
-        private const string WindowsPath = "Window/MARS";
-        public const string MarsPanelPath = WindowsPath + "/MARS Panel";
+        private const string WindowsPath = "Window";
+        public const string MarsPanelPath = WindowsPath + "/MARS/MARS Panel";
+        public const string InspectorPath = WindowsPath + "/General/Inspector";
     }
 
     public static class AssertionErrorMessages
     {
         public const string NoMarsPanel = "Could not open the MARS panel from the Window MenuItem";
+    }
+
+    public static class InspectorComponents
+    {
+        public const string MissingPlaneSizeConditionHelpBox =
+            "No conditions have been assigned to this entity, so it won't match any world data.\nUse 'Add MARS Component -> Condition' below, or click the button to add a PlaneSize condition to make this Entity match a surface with a minimum size.";
     }
 }
