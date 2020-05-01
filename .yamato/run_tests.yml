@@ -30,7 +30,7 @@ MacOS_Tests:
   commands:
     - npm pack
     - unity-downloader-cli -b 2019.3.0f6 -c Editor --wait --published-only
-    - Unity.app/Contents/MacOS/Unity -createProject /Users/bokken/build/output/jasons-unity/com.unity.xrtools.mars-viking/testProject -batchmode -quit
+    - .Editor/Unity.app/Contents/MacOS/Unity -createProject /Users/bokken/build/output/jasons-unity/com.unity.xrtools.mars-viking/testProject -batchmode -quit
     - mv *.tgz testProject/Packages
     - curl -s https://artifactory.internal.unity3d.com/core-automation/tools/utr-standalone/utr --output utr
     - chmod +x utr
