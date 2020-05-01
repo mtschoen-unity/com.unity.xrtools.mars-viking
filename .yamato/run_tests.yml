@@ -4,7 +4,6 @@ Windows_Tests:
     type: Unity::VM
     flavor: b1.large
     image: package-ci/win10:stable
-  skip_checkout: true
   commands:
     - set
     - unity-downloader-cli -b 2019.3.0f6 -c Editor --wait --published-only
@@ -28,7 +27,6 @@ MacOS_Tests:
     type: Unity::VM::osx
     image: package-ci/mac:stable
     flavor: m1.mac
-  skip_checkout: true
   commands:
     - set
     - unity-downloader-cli -b 2019.3.0f6 -c Editor --wait --published-only
