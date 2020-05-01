@@ -18,7 +18,7 @@ namespace MARSVikingTests
         [SetUp]
         public void SetUp()
         {
-            //EditorApplication.ExecuteMenuItem("Window/Layouts/Revert Factory Settings...");
+            EditorApplication.ExecuteMenuItem("Window/Layouts/Default");
         }
 
         [TearDown]
