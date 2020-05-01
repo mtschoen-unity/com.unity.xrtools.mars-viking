@@ -8,7 +8,7 @@ Windows_Tests:
   commands:
     - unity-downloader-cli -b 2019.3.0f6 -c Editor --wait --published-only
     - .Editor\Unity.exe -createProject C:\build\output\jasons-unity\com.unity.xrtools.mars-viking\testProject -batchmode -quit
-    - git clone git@github.com:jasons-unity/com.unity.xrtools.mars-viking.git C:\build\output\jasons-unity\com.unity.xrtools.mars-viking\testProject\Packages\ && cd C:\build\output\jasons-unity\com.unity.xrtools.mars-viking\testProject\Packages\com.unity.xrtools.mars-viking && git checkout %GIT_BRANCH%
+    - git clone git@github.com:jasons-unity/com.unity.xrtools.mars-viking.git C:\build\output\jasons-unity\com.unity.xrtools.mars-viking\testProject\Packages\com.unity.xrtools.mars-viking && cd C:\build\output\jasons-unity\com.unity.xrtools.mars-viking\testProject\Packages\com.unity.xrtools.mars-viking && git checkout %GIT_BRANCH%
     - curl -s https://artifactory.internal.unity3d.com/core-automation/tools/utr-standalone/utr.bat --output utr.bat
     - utr --suite=editor --suite=playmode --testproject=C:\build\output\jasons-unity\com.unity.xrtools.mars-viking/testProject --editor-location=C:\build\output\jasons-unity\com.unity.xrtools.mars-viking\.Editor --artifacts_path=C:\build\output\jasons-unity\com.unity.xrtools.mars-viking\test_results
   artifacts:
@@ -31,7 +31,7 @@ MacOS_Tests:
   commands:
     - unity-downloader-cli -b 2019.3.0f6 -c Editor --wait --published-only
     - .Editor/Unity.app/Contents/MacOS/Unity -createProject /Users/bokken/build/output/jasons-unity/com.unity.xrtools.mars-viking/testProject -batchmode -quit
-    - git clone git@github.com:jasons-unity/com.unity.xrtools.mars-viking.git /Users/bokken/build/output/jasons-unity/com.unity.xrtools.mars-viking/testProject/Packages/ && cd /Users/bokken/build/output/jasons-unity/com.unity.xrtools.mars-viking/testProject/Packages/com.unity.xrtools.mars-viking && git checkout $GIT_BRANCH
+    - git clone git@github.com:jasons-unity/com.unity.xrtools.mars-viking.git /Users/bokken/build/output/jasons-unity/com.unity.xrtools.mars-viking/testProject/Packages/com.unity.xrtools.mars-viking && cd /Users/bokken/build/output/jasons-unity/com.unity.xrtools.mars-viking/testProject/Packages/com.unity.xrtools.mars-viking && git checkout $GIT_BRANCH
     - curl -s https://artifactory.internal.unity3d.com/core-automation/tools/utr-standalone/utr --output utr
     - chmod +x utr
     - ./utr --suite=editor --suite=playmode --testproject=/Users/bokken/build/output/jasons-unity/com.unity.xrtools.mars-viking/testProject --editor-location=/Users/bokken/build/output/jasons-unity/com.unity.xrtools.mars-viking/.Editor --artifacts_path=/Users/bokken/build/output/jasons-unity/com.unity.xrtools.mars-viking/test_results
