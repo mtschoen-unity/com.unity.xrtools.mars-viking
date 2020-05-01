@@ -7,10 +7,10 @@ Windows_Tests:
   commands:
     - npm pack
     - unity-downloader-cli -b 2019.3.0f6 -c Editor --wait --published-only
-    - .Editor\Unity.exe -createProject C:\build\output\UnityLabs\com.unity.xrtools.mars-viking\testProject -batchmode -quit
-    - move *.tgz testProject\Packages\
+    - .Editor\Unity.exe -createProject C:\build\output\jasons-unity\com.unity.xrtools.mars-viking\testProject -batchmode -quit
+    - move *.tgz C:\build\output\jasons-unity\com.unity.xrtools.mars-viking\testProject\Packages\
     - curl -s https://artifactory.internal.unity3d.com/core-automation/tools/utr-standalone/utr.bat --output utr.bat
-    - utr --suite=editor --suite=playmode --testproject=C:\build\output\UnityLabs\com.unity.xrtools.mars-viking/testProject --editor-location=C:\build\output\UnityLabs\com.unity.xrtools.mars-viking\.Editor --artifacts_path=C:\build\output\UnityLabs\com.unity.xrtools.mars-viking\test_results
+    - utr --suite=editor --suite=playmode --testproject=C:\build\output\jasons-unity\com.unity.xrtools.mars-viking/testProject --editor-location=C:\build\output\jasons-unity\com.unity.xrtools.mars-viking\.Editor --artifacts_path=C:\build\output\jasons-unity\com.unity.xrtools.mars-viking\test_results
   artifacts:
     test_results:
       paths:
@@ -30,11 +30,11 @@ MacOS_Tests:
   commands:
     - npm pack
     - unity-downloader-cli -b 2019.3.0f6 -c Editor --wait --published-only
-    - Unity.app/Contents/MacOS/Unity -createProject /Users/bokken/build/output/UnityLabs/com.unity.xrtools.mars-viking/testProject -batchmode -quit
+    - Unity.app/Contents/MacOS/Unity -createProject /Users/bokken/build/output/jasons-unity/com.unity.xrtools.mars-viking/testProject -batchmode -quit
     - mv *.tgz testProject/Packages
     - curl -s https://artifactory.internal.unity3d.com/core-automation/tools/utr-standalone/utr --output utr
     - chmod +x utr
-    - ./utr --suite=editor --suite=playmode --testproject=/Users/bokken/build/output/UnityLabs/com.unity.xrtools.mars-viking/testProject --editor-location=/Users/bokken/build/output/UnityLabs/com.unity.xrtools.mars-viking/.Editor --artifacts_path=/Users/bokken/build/output/UnityLabs/com.unity.xrtools.mars-viking/test_results
+    - ./utr --suite=editor --suite=playmode --testproject=/Users/bokken/build/output/jasons-unity/com.unity.xrtools.mars-viking/testProject --editor-location=/Users/bokken/build/output/jasons-unity/com.unity.xrtools.mars-viking/.Editor --artifacts_path=/Users/bokken/build/output/jasons-unity/com.unity.xrtools.mars-viking/test_results
   artifacts:
     test_results:
       paths:
