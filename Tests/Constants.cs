@@ -24,6 +24,7 @@ public static class Constants
         private const string WindowsPath = "Window";
         public const string MarsPanelPath = WindowsPath + "/MARS/MARS Panel";
         public const string InspectorPath = WindowsPath + "/General/Inspector";
+        public const string MarsSimulationViewPath = WindowsPath + "/MARS/Simulation View";
     }
 
     public static class AssertionErrorMessages

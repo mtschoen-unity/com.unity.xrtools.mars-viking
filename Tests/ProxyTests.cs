@@ -1,14 +1,13 @@
 ﻿using System.Collections;
-using System.Collections.Generic;
 using System.Linq;
 using NUnit.Framework;
 using Unity.Labs.MARS;
 using UnityEditor;
+using UnityEditor.SceneManagement;
 using UnityEngine;
 using UnityEditor.UIAutomation;
-using UnityEngine.Assertions.Must;
+using UnityEngine.SceneManagement;
 using UnityEngine.TestTools;
-using UnityEngine.UIElements;
 
 // ReSharper disable once CheckNamespace
 namespace MARSVikingTests
@@ -19,13 +18,22 @@ namespace MARSVikingTests
         public void SetUp()
         {
             EditorApplication.ExecuteMenuItem("Window/Layouts/Default");
+            EditorSceneManager.NewScene(NewSceneSetup.EmptyScene, NewSceneMode.Single);
         }
 
         [TearDown]
         public void TearDown()
         {
+            EditorSceneManager.CloseScene(SceneManager.GetActiveScene(), true);
+            /*var goAll = Resources.FindObjectsOfTypeAll(typeof(GameObject)).ToList();
+            foreach (var go in goAll)
+            {
+                if(go.name == "Proxy Object")
+                    GameObject.DestroyImmediate(go, true);
+            }*/
         }
 
+        
         [UnityTest]
         [Category("Acceptance")]
         [NUnit.Framework.Property("TestRailId", "C576069")]
@@ -108,6 +116,62 @@ namespace MARSVikingTests
             var goAll = Resources.FindObjectsOfTypeAll(typeof(GameObject)).ToList();
             Assert.IsTrue(goAll.Find(x => x.name == Constants.HierarchyPanel.ProxyGameObjectName));
             Assert.IsTrue(goAll.Find(x => x.name == Constants.HierarchyPanel.MarsSessionGameObjectName));
+            yield return null;
+        }
+        
+        [UnityTest]
+        [Category("Use Case")]
+        [NUnit.Framework.Property("TestRailId", "C576677")]
+        public IEnumerator CanDisplayPrefabWhenProxyConditionIsMatched()
+        {
+            EditorApplication.ExecuteMenuItem(Constants.WindowsMenu.MarsSimulationViewPath);
+            EditorApplication.ExecuteMenuItem(Constants.WindowsMenu.MarsPanelPath);
+            EditorApplication.RequestRepaintAllViews();
+            yield return null;
+            yield return null;
+            var marsPanel = Resources.FindObjectsOfTypeAll<MARSPanel>().FirstOrDefault();
+            
+            EditorApplication.ExecuteMenuItem(Constants.MarsGameObjectMenu.ProxyMenuPath);
+            var goAll = Resources.FindObjectsOfTypeAll(typeof(GameObject)).ToList();
+            var myProxy =  goAll.Find(x => x.name == Constants.HierarchyPanel.ProxyGameObjectName) as GameObject;
+            Assert.IsTrue(myProxy, "Could not find Proxy in Scene");
+            
+            GameObject cube = GameObject.CreatePrimitive(PrimitiveType.Cube);
+            cube.transform.parent = myProxy.transform;
+            myProxy.AddComponent<PlaneSizeCondition>();
+
+            AutomatedIMElement proxyObject = null;
+
+            Assert.That(marsPanel, Is.Not.Null,
+                Constants.AssertionErrorMessages.NoMarsPanel);
+            
+            yield return null;
+            EditorApplication.RequestRepaintAllViews();
+            yield return null;
+
+            using (var window = new MarsAutomatedWindow<MARSPanel>(marsPanel))
+            {
+                var content = new GUIContent(
+                    "Content Hierarchy",
+                    tooltip: null
+                );
+
+                var contentHierarchy = window.FindElementsByGUIContent(content).ToArray().First() as AutomatedIMElement;
+                Assert.NotNull(contentHierarchy, "Could not find MARS Panel Content Hierarchy");
+                var contentHierarchyList = contentHierarchy.nextSibling as AutomatedIMElement;
+                Assert.NotNull(contentHierarchyList, "Could not find MARS Panel Content Hierarchy List of content");
+                
+                var content2 = new GUIContent(
+                    "Proxy Object",
+                    "Match found"
+                );
+                
+                
+                proxyObject = contentHierarchyList.FindElementsByGUIContent(content2).ToArray().First() as AutomatedIMElement;
+
+            }
+
+            Assert.NotNull(proxyObject, "Proxy was not matched");
             yield return null;
         }
     }
