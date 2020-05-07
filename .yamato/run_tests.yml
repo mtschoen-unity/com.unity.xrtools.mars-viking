@@ -31,6 +31,7 @@ MacOS_Tests:
     flavor: m1.mac
   skip_checkout: true
   commands:
+    - /Library/Application\ Support/Veertu/Anka/addons/change_res 1920x1080x72
     - unity-downloader-cli -u 2019.3.0f6 -c Editor --wait --published-only
     - .Editor/Unity.app/Contents/MacOS/Unity -createProject /Users/bokken/build/output/jasons-unity/com.unity.xrtools.mars-viking/testProject -quit
     - npm install -g json
