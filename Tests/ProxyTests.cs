@@ -18,7 +18,7 @@ namespace MARSVikingTests
         [SetUp]
         public void SetUp()
         {
-            //EditorApplication.ExecuteMenuItem("Window/Layouts/Default");
+            EditorApplication.ExecuteMenuItem("Window/Layouts/Default");
             EditorSceneManager.NewScene(NewSceneSetup.EmptyScene, NewSceneMode.Single);
         }
 
