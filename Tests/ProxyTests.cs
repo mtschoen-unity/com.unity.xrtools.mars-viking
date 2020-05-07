@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Linq;
 using NUnit.Framework;
 using Unity.Labs.MARS;
@@ -17,7 +18,7 @@ namespace MARSVikingTests
         [SetUp]
         public void SetUp()
         {
-            EditorApplication.ExecuteMenuItem("Window/Layouts/Default");
+            //EditorApplication.ExecuteMenuItem("Window/Layouts/Default");
             EditorSceneManager.NewScene(NewSceneSetup.EmptyScene, NewSceneMode.Single);
         }
 
@@ -125,11 +126,14 @@ namespace MARSVikingTests
         public IEnumerator CanDisplayPrefabWhenProxyConditionIsMatched()
         {
             EditorApplication.ExecuteMenuItem(Constants.WindowsMenu.MarsSimulationViewPath);
-            EditorApplication.ExecuteMenuItem(Constants.WindowsMenu.MarsPanelPath);
+            //EditorApplication.ExecuteMenuItem(Constants.WindowsMenu.MarsPanelPath);
             EditorApplication.RequestRepaintAllViews();
             yield return null;
             yield return null;
-            var marsPanel = Resources.FindObjectsOfTypeAll<MARSPanel>().FirstOrDefault();
+
+
+            var marsPanel = EditorWindow.GetWindow<MARSPanel>(typeof(InspectorWindow));
+
             
             EditorApplication.ExecuteMenuItem(Constants.MarsGameObjectMenu.ProxyMenuPath);
             var goAll = Resources.FindObjectsOfTypeAll(typeof(GameObject)).ToList();
@@ -165,6 +169,9 @@ namespace MARSVikingTests
                     "Proxy Object",
                     "Match found"
                 );
+                yield return null;
+                EditorApplication.RequestRepaintAllViews();
+                yield return null;
                 
                 
                 proxyObject = contentHierarchyList.FindElementsByGUIContent(content2).ToArray().First() as AutomatedIMElement;
