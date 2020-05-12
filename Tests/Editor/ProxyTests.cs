@@ -6,14 +6,14 @@ using Unity.Labs.MARS;
 using UnityEditor;
 using UnityEditor.SceneManagement;
 using UnityEngine;
-using UnityEditor.UIAutomation;
+//using UnityEditor.UIAutomation;
 using UnityEngine.SceneManagement;
 using UnityEngine.TestTools;
 
 // ReSharper disable once CheckNamespace
-namespace MARSVikingTests
+namespace MARSViking
 {
-    public class ProxyTests
+    public class EditorProxyTests
     {
         [SetUp]
         public void SetUp()
@@ -34,6 +34,7 @@ namespace MARSVikingTests
             }*/
         }
 
+        
         
         [UnityTest]
         [Category("Acceptance")]
@@ -56,7 +57,7 @@ namespace MARSVikingTests
             Assert.IsTrue(goAll.Find(x => x.name == Constants.HierarchyPanel.MarsSessionGameObjectName));
             yield return null;
         }
-
+    
         [UnityTest]
         [Category("Acceptance")]
         [NUnit.Framework.Property("TestRailId", "C576447")]
@@ -67,24 +68,25 @@ namespace MARSVikingTests
             var proxyObj = goAll.Find(x => x.name == Constants.HierarchyPanel.ProxyGameObjectName) as GameObject;
             Assert.IsTrue(proxyObj, "Could not find Proxy Object in scene");
 
-            IAutomatedUIElement planeSizeCondButton;
-            IAutomatedUIElement planeSizeConditionHelpBox;
+            AutomatedIMElement planeSizeCondButton;
+            AutomatedIMElement planeSizeConditionHelpBox;
             var inspectorWindow = Resources.FindObjectsOfTypeAll<InspectorWindow>().FirstOrDefault();
             using (var window = new MarsAutomatedWindow<InspectorWindow>(inspectorWindow))
             {
+                
                 yield return null;
 
                 planeSizeCondButton = window.FindElementsByGUIContent(
                     new GUIContent(
                         "Add PlaneSize Condition",
                         tooltip: null
-                    )).ToArray().FirstOrDefault();
+                    )).ToArray().FirstOrDefault() as AutomatedIMElement;
 
                 planeSizeConditionHelpBox = window.FindElementsByGUIContent(
                     new GUIContent(
                         Constants.InspectorComponents.MissingPlaneSizeConditionHelpBox,
                         tooltip: null
-                    )).ToArray().FirstOrDefault();
+                    )).ToArray().FirstOrDefault() as AutomatedIMElement;
             }
             Assert.IsTrue(planeSizeCondButton != null);
             Assert.IsTrue(planeSizeConditionHelpBox != null);
@@ -181,5 +183,9 @@ namespace MARSVikingTests
             Assert.NotNull(proxyObject, "Proxy was not matched");
             yield return null;
         }
+        
+
+
+
     }
 }

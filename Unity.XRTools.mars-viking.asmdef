@@ -3,9 +3,9 @@
     "references": [
         "UnityEngine.TestRunner",
         "UnityEditor.TestRunner",
-        "Unity.Labs.MARS.Editor",
         "Unity.Labs.MARS",
-        "Unity.Labs.MARS.Interfaces"
+        "Unity.Labs.MARS.Editor",
+        "UnityEditor.UI"
     ],
     "includePlatforms": [
         "Editor"
