@@ -5,7 +5,8 @@
         "UnityEditor.TestRunner",
         "Unity.Labs.MARS",
         "Unity.Labs.MARS.Editor",
-        "UnityEditor.UI"
+        "UnityEditor.UI",
+        "Unity.Labs.MARS.Interfaces"
     ],
     "includePlatforms": [
         "Editor"

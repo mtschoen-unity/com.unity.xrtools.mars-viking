@@ -132,10 +132,8 @@ namespace MARSViking
             EditorApplication.RequestRepaintAllViews();
             yield return null;
             yield return null;
-
-
+            
             var marsPanel = EditorWindow.GetWindow<MARSPanel>(typeof(InspectorWindow));
-
             
             EditorApplication.ExecuteMenuItem(Constants.MarsGameObjectMenu.ProxyMenuPath);
             var goAll = Resources.FindObjectsOfTypeAll(typeof(GameObject)).ToList();
@@ -175,7 +173,7 @@ namespace MARSViking
                 EditorApplication.RequestRepaintAllViews();
                 yield return null;
                 
-                
+                System.Threading.Thread.Sleep(500);
                 proxyObject = contentHierarchyList.FindElementsByGUIContent(content2).ToArray().First() as AutomatedIMElement;
 
             }
