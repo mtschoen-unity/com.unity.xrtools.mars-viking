@@ -521,7 +521,7 @@ namespace MARSViking
 
         private static bool GUIContentsAreEqual(GUIContent content1, GUIContent content2)
         {
-            if (content1 == null || content2 == null)
+            if (content1 == null)
                 return false;
             
             if (content1 == content2)
