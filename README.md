@@ -18,6 +18,9 @@ Named after NASA's Viking project which became the first US mission to land a sp
 ```
 
 ## Writing Test Cases
+### Unity Test Annotations
+
+
 ### Nunit Attributes and TestRail
 Each test should have a one-to-one mapping to the tests in [TestRail](http://qatestrail.hq.unity3d.com/index.php?/suites/view/5708).  You should add the TestRail test id to the Attributes of your test case :
 
@@ -30,6 +33,13 @@ Each test should also make use of the Category Nunit Attribute so that we can ru
 ```
 [Category("Acceptance")]
 ```
+
+### Types of tests
+#### Acceptance
+This type of test only requires the feature under test to be executed from the user interface.  All setup steps can be done in code while the step leading tot he assertion must be done using UIAutomation.  For example, if a Proxy setting is under test, the creation of the Proxy can be done with instantiating the object rather than using UI buttons but the setting must be updated by the user interface.
+
+#### Use case
+This type of test requires all steps to go through the user interface as a user would execute each step.  Nothing should be instantiated via code.
 
 ### Constants
 Each test should make use of constants for location paths, text and any other GUI Elements used in a test.  The idea here is to have one location for all strings which can be reused.  It also makes modifications easy when a change takes place in the application under test.

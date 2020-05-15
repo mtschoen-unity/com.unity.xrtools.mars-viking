@@ -1,14 +1,15 @@
-﻿using System;
-using System.Collections;
+﻿using System.Collections;
 using System.Linq;
 using NUnit.Framework;
 using Unity.Labs.MARS;
+using Unity.Labs.ModuleLoader;
 using UnityEditor;
 using UnityEditor.SceneManagement;
 using UnityEngine;
-//using UnityEditor.UIAutomation;
 using UnityEngine.SceneManagement;
 using UnityEngine.TestTools;
+using static UnityEngine.GameObject;
+using Object = UnityEngine.Object;
 
 // ReSharper disable once CheckNamespace
 namespace MARSViking
@@ -18,44 +19,53 @@ namespace MARSViking
         [SetUp]
         public void SetUp()
         {
+            // Reset view before each test
             EditorApplication.ExecuteMenuItem("Window/Layouts/Default");
+            // Create a new scene before each test
             EditorSceneManager.NewScene(NewSceneSetup.EmptyScene, NewSceneMode.Single);
         }
 
         [TearDown]
         public void TearDown()
         {
+            // Remove dirty scene after test
             EditorSceneManager.CloseScene(SceneManager.GetActiveScene(), true);
-            /*var goAll = Resources.FindObjectsOfTypeAll(typeof(GameObject)).ToList();
-            foreach (var go in goAll)
-            {
-                if(go.name == "Proxy Object")
-                    GameObject.DestroyImmediate(go, true);
-            }*/
         }
 
-        
-        
-        [UnityTest]
+        [Test]
         [Category("Acceptance")]
         [NUnit.Framework.Property("TestRailId", "C576069")]
-        public IEnumerator CanCreateProxyFromGameObjectMenu()
+        public void CanCreateProxyFromGameObjectMenu()
         {
-            EditorApplication.ExecuteMenuItem(Constants.MarsGameObjectMenu.ProxyMenuPath);
-            var goAll = Resources.FindObjectsOfTypeAll(typeof(GameObject)).ToList();
-            Assert.IsTrue(goAll.Find(x => x.name == Constants.HierarchyPanel.ProxyGameObjectName));
-            yield return null;
+            // Create a Proxy using the GameObject Menu
+            EditorApplication.ExecuteMenuItem(Constants.GameObjectMarsMenu.CreateProxy);
+            // Find all gameObjects in Scene
+            var sceneGameObjects = Object.FindObjectsOfType<GameObject>().ToList();
+
+            // Find my Proxy
+            var newProxy = sceneGameObjects.Find(
+                x => x.name == Constants.HierarchyPanel.ProxyName
+                );
+            
+            Assert.NotNull(newProxy, Constants.AssertionErrorMessages.NoProxy);
         }
 
-        [UnityTest]
+        [Test]
         [Category("Acceptance")]
         [NUnit.Framework.Property("TestRailId", "C576067")]
-        public IEnumerator CanCreateNewSessionAlongWithNewProxy()
+        public void CanCreateNewSessionAlongWithNewProxy()
         {
-            EditorApplication.ExecuteMenuItem(Constants.MarsGameObjectMenu.ProxyMenuPath);
-            var goAll = Resources.FindObjectsOfTypeAll(typeof(GameObject)).ToList();
-            Assert.IsTrue(goAll.Find(x => x.name == Constants.HierarchyPanel.MarsSessionGameObjectName));
-            yield return null;
+            // Create a Proxy using the GameObject Menu
+            EditorApplication.ExecuteMenuItem(Constants.GameObjectMarsMenu.CreateProxy);
+            // Find all gameObjects in Scene
+            var sceneGameObjects = Object.FindObjectsOfType<GameObject>().ToList();
+
+            // Find the Mars Session created when adding a Proxy
+            var newMarsSession = sceneGameObjects.Find(
+                x => x.name == Constants.HierarchyPanel.MarsSession
+                );
+            
+            Assert.NotNull(newMarsSession, Constants.AssertionErrorMessages.NoMarsSession);
         }
     
         [UnityTest]
@@ -63,63 +73,83 @@ namespace MARSViking
         [NUnit.Framework.Property("TestRailId", "C576447")]
         public IEnumerator CanSeeMissingConditionWarning()
         {
-            EditorApplication.ExecuteMenuItem(Constants.MarsGameObjectMenu.ProxyMenuPath);
-            var goAll = Resources.FindObjectsOfTypeAll(typeof(GameObject)).ToList();
-            var proxyObj = goAll.Find(x => x.name == Constants.HierarchyPanel.ProxyGameObjectName) as GameObject;
-            Assert.IsTrue(proxyObj, "Could not find Proxy Object in scene");
-
-            AutomatedIMElement planeSizeCondButton;
+            AutomatedIMElement planeSizeConditionCreateButton;
             AutomatedIMElement planeSizeConditionHelpBox;
-            var inspectorWindow = Resources.FindObjectsOfTypeAll<InspectorWindow>().FirstOrDefault();
+            
+            // Create a Proxy
+            EditorApplication.ExecuteMenuItem(Constants.GameObjectMarsMenu.CreateProxy);
+            var sceneGameObjects = Object.FindObjectsOfType<GameObject>().ToList();
+            var newProxy = sceneGameObjects.Find(
+                x => x.name == Constants.HierarchyPanel.ProxyName
+                );
+            if(newProxy == null)
+                Assert.Inconclusive(Constants.AssertionErrorMessages.NoProxy);
+
+            // Open Inspector Window
+            var inspectorWindow = EditorWindow.GetWindow<InspectorWindow>();
+            if(inspectorWindow == null)
+                Assert.Inconclusive("Could not find Inspector Window during setting up test");
+            
+            // Grab hold of the Inspector windows
             using (var window = new MarsAutomatedWindow<InspectorWindow>(inspectorWindow))
             {
-                
+                // Move forward one step to refresh the Inspector UI
                 yield return null;
 
-                planeSizeCondButton = window.FindElementsByGUIContent(
+                // Grab hold of the default add PlaneSize Condition Button in Inspector
+                planeSizeConditionCreateButton = window.FindElementsByGUIContent(
                     new GUIContent(
                         "Add PlaneSize Condition",
                         tooltip: null
                     )).ToArray().FirstOrDefault() as AutomatedIMElement;
 
+                // Grab hold of the default add PlaneSize Condition Button in Inspector
                 planeSizeConditionHelpBox = window.FindElementsByGUIContent(
                     new GUIContent(
                         Constants.InspectorComponents.MissingPlaneSizeConditionHelpBox,
                         tooltip: null
                     )).ToArray().FirstOrDefault() as AutomatedIMElement;
             }
-            Assert.IsTrue(planeSizeCondButton != null);
-            Assert.IsTrue(planeSizeConditionHelpBox != null);
+            
+            Assert.NotNull(planeSizeConditionCreateButton, "Cannot find Create PlaneSize Condition button in Inspector");
+            Assert.NotNull(planeSizeConditionHelpBox, "Cannot find Missing Condition Help Box in Inspector");
         }
 
-        [UnityTest]
+        [Test]
         [Category("Acceptance")]
         [NUnit.Framework.Property("TestRailId", "C573635")]
-        public IEnumerator CanCreateProxyFromMarsPanel()
+        public void CanCreateProxyFromMarsPanel()
         {
-            EditorApplication.ExecuteMenuItem(Constants.WindowsMenu.MarsPanelPath);
-            EditorApplication.RequestRepaintAllViews();
-            var marsPanel = Resources.FindObjectsOfTypeAll<MARSPanel>().FirstOrDefault();
-            Assert.That(marsPanel, Is.Not.Null,
-                Constants.AssertionErrorMessages.NoMarsPanel);
+            // Open the MARS Panel
+            EditorApplication.ExecuteMenuItem(Constants.WindowsMenu.OpenMarsPanel);
+            var marsPanel = EditorWindow.GetWindow<MARSPanel>();
+            if(marsPanel == null)
+                Assert.Inconclusive(Constants.AssertionErrorMessages.NoMarsPanel);
 
+            // Grab hold of the Mars Panel
             using (var window = new MarsAutomatedWindow<MARSPanel>(marsPanel))
             {
                 var content = new GUIContent(
                     Constants.MarsPanel.ProxyButtonText,
                     Constants.MarsPanel.ProxyButtonTooltip
                 );
-
+                
+                // Find the Create Proxy button and click it
                 var proxyButton = window.FindElementsByGUIContent(content).ToArray().FirstOrDefault();
-
+                
+                if(proxyButton == null)
+                    Assert.Inconclusive(Constants.AssertionErrorMessages.NoProxyInMarsPanel);
                 window.Click(proxyButton);
-                window.window.RepaintImmediately();
             }
             
-            var goAll = Resources.FindObjectsOfTypeAll(typeof(GameObject)).ToList();
-            Assert.IsTrue(goAll.Find(x => x.name == Constants.HierarchyPanel.ProxyGameObjectName));
-            Assert.IsTrue(goAll.Find(x => x.name == Constants.HierarchyPanel.MarsSessionGameObjectName));
-            yield return null;
+            // Find the Proxy among all the game objects in Scene
+            var sceneGameObjects = Object.FindObjectsOfType<GameObject>().ToList();
+            var newProxy = sceneGameObjects.Find(
+                x => x.name == Constants.HierarchyPanel.ProxyName
+                );
+
+            Assert.NotNull(newProxy, Constants.AssertionErrorMessages.NoProxy);
+
         }
         
         [UnityTest]
@@ -127,63 +157,63 @@ namespace MARSViking
         [NUnit.Framework.Property("TestRailId", "C576677")]
         public IEnumerator CanDisplayPrefabWhenProxyConditionIsMatched()
         {
-            EditorApplication.ExecuteMenuItem(Constants.WindowsMenu.MarsSimulationViewPath);
-            //EditorApplication.ExecuteMenuItem(Constants.WindowsMenu.MarsPanelPath);
-            EditorApplication.RequestRepaintAllViews();
-            yield return null;
-            yield return null;
+            AutomatedIMElement proxyObject;
             
+            // Open Simulation View and Open the MarsPanel next to Inspector 
+            // MARS Panel must be placed in position where it is fully extended so we can grab hold of UI elements
+            EditorApplication.ExecuteMenuItem(Constants.WindowsMenu.OpenSimulationView);
             var marsPanel = EditorWindow.GetWindow<MARSPanel>(typeof(InspectorWindow));
+            var simView = EditorWindow.GetWindow<SimulationView>();
+            if(marsPanel == null)
+                Assert.Inconclusive(Constants.AssertionErrorMessages.NoMarsPanel);
+            if(simView == null)
+                Assert.Inconclusive(Constants.AssertionErrorMessages.NoSimulationView);
+
+            // Create a Proxy
+            EditorApplication.ExecuteMenuItem(Constants.GameObjectMarsMenu.CreateProxy);
+            var myProxy = Object.FindObjectsOfType<Proxy>().ToArray().FirstOrDefault();
+            if(myProxy == null)
+                Assert.Inconclusive(Constants.AssertionErrorMessages.NoProxy);
             
-            EditorApplication.ExecuteMenuItem(Constants.MarsGameObjectMenu.ProxyMenuPath);
-            var goAll = Resources.FindObjectsOfTypeAll(typeof(GameObject)).ToList();
-            var myProxy =  goAll.Find(x => x.name == Constants.HierarchyPanel.ProxyGameObjectName) as GameObject;
-            Assert.IsTrue(myProxy, "Could not find Proxy in Scene");
-            
-            GameObject cube = GameObject.CreatePrimitive(PrimitiveType.Cube);
+            // Add a Cube as a child to the Proxy
+            var cube = CreatePrimitive(PrimitiveType.Cube);
             cube.transform.parent = myProxy.transform;
-            myProxy.AddComponent<PlaneSizeCondition>();
+            myProxy.gameObject.AddComponent<PlaneSizeCondition>();
 
-            AutomatedIMElement proxyObject = null;
+            // Get the SimulationManager and wait until it is in sync before looking in the Content Hierarchy of the MARS Panel
+            var simManager = ModuleLoaderCore.instance.GetModule<SimulatedObjectsManager>();
+            var counter = 0;
+            while (counter < Constants.TestControls.QueryThreshold && simManager.SimulationSyncedWithScene == false)
+            {
+                yield return null;
+                System.Threading.Thread.Sleep(500);
+                counter++;
+            }
 
-            Assert.That(marsPanel, Is.Not.Null,
-                Constants.AssertionErrorMessages.NoMarsPanel);
-            
-            yield return null;
-            EditorApplication.RequestRepaintAllViews();
-            yield return null;
-
+            // Grab hold of the MARS Panel and find the Content Hierarchy
             using (var window = new MarsAutomatedWindow<MARSPanel>(marsPanel))
             {
-                var content = new GUIContent(
+                var contentHierarchyGuiContent = new GUIContent(
                     "Content Hierarchy",
                     tooltip: null
                 );
 
-                var contentHierarchy = window.FindElementsByGUIContent(content).ToArray().First() as AutomatedIMElement;
-                Assert.NotNull(contentHierarchy, "Could not find MARS Panel Content Hierarchy");
+                var contentHierarchy = window.FindElementsByGUIContent(contentHierarchyGuiContent).ToArray().First() as AutomatedIMElement;
+                if(contentHierarchy == null)
+                    Assert.Inconclusive(Constants.AssertionErrorMessages.NoContentHierarchy);
+
                 var contentHierarchyList = contentHierarchy.nextSibling as AutomatedIMElement;
-                Assert.NotNull(contentHierarchyList, "Could not find MARS Panel Content Hierarchy List of content");
-                
-                var content2 = new GUIContent(
-                    "Proxy Object",
+                if(contentHierarchyList == null)
+                    Assert.Inconclusive(Constants.AssertionErrorMessages.NoContentHierarchyList);
+
+                // Search for our Proxy and make sure it is matched
+                var proxyGuiContent = new GUIContent(
+                    Constants.HierarchyPanel.ProxyName,
                     "Match found"
                 );
-                yield return null;
-                EditorApplication.RequestRepaintAllViews();
-                yield return null;
-                
-                System.Threading.Thread.Sleep(500);
-                proxyObject = contentHierarchyList.FindElementsByGUIContent(content2).ToArray().First() as AutomatedIMElement;
-
+                proxyObject = contentHierarchyList.FindElementsByGUIContent(proxyGuiContent).ToArray().FirstOrDefault() as AutomatedIMElement;
             }
-
-            Assert.NotNull(proxyObject, "Proxy was not matched");
-            yield return null;
+            Assert.NotNull(proxyObject, Constants.AssertionErrorMessages.NoProxyMatch);
         }
-        
-
-
-
     }
 }
