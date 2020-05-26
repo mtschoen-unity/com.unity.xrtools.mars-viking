@@ -4,7 +4,8 @@
   "version": "0.1.0-preview",
   "unity": "2019.3",
   "dependencies": {
-    "com.unity.labs.mars-ar-foundation-providers": "0.1.8-preview",
-    "com.unity.labs.mars-nav-mesh": "0.1.6-preview"
+    "com.unity.labs.mars-ar-foundation-providers": "0.1.18-preview",
+    "com.unity.labs.mars-nav-mesh": "0.1.16-preview",
+    "com.unity.labs.mars": "0.9.10-preview"
   }
 }

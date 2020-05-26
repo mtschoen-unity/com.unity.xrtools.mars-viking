@@ -1,8 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
+using UnityEditor;
+using UnityEditor.UIAutomation;
 using UnityEngine;
 
-namespace UnityEditor.UIAutomation
+namespace MARSViking
 {
     class MarsAutomatedWindow<T> : IElementFinder, IDisposable where T : EditorWindow
     {
@@ -213,7 +216,7 @@ namespace UnityEditor.UIAutomation
         }
     }
 
-    class IMModel : IElementFinder
+    public class IMModel : IElementFinder
     {
         private readonly List<IMGUIInstruction>             m_Instructions     = new List<IMGUIInstruction>();
         private readonly List<IMGUIClipInstruction>         m_ClipList         = new List<IMGUIClipInstruction>();
@@ -354,7 +357,7 @@ namespace UnityEditor.UIAutomation
         }
     }
 
-    interface IElementFinder
+    public interface IElementFinder
     {
         IEnumerable<IAutomatedUIElement> FindElementsByGUIStyle(GUIStyle style);
         IEnumerable<IAutomatedUIElement> FindElementsByGUIContent(GUIContent guiContent);
@@ -362,7 +365,7 @@ namespace UnityEditor.UIAutomation
         IAutomatedUIElement nextSibling { get; }
     }
 
-    interface IAutomatedUIElement : IElementFinder
+    public interface IAutomatedUIElement : IElementFinder
     {
         string name { get; }
 
@@ -381,7 +384,7 @@ namespace UnityEditor.UIAutomation
         GUIContent guiContent { get; }
     }
 
-    class AutomatedIMElement : IAutomatedUIElement
+    public class AutomatedIMElement : IAutomatedUIElement
     {
 #pragma warning disable 414
         private IMModel m_ModelOwner;
@@ -537,4 +540,5 @@ namespace UnityEditor.UIAutomation
             return FindElements(element => GUIContentsAreEqual(element.guiContent, guiContent));
         }
     }
+    
 }
