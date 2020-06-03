@@ -3,14 +3,14 @@
     "references": [
         "UnityEngine.TestRunner",
         "UnityEditor.TestRunner",
-        "Unity.Labs.MARS",
-        "Unity.Labs.MARS.Editor",
+        "Unity.MARS",
+        "Unity.MARS.Editor",
         "UnityEditor.UI",
-        "Unity.Labs.MARS.Interfaces",
-        "Unity.Labs.Utils",
-        "Unity.Labs.ModuleLoader",
-        "Unity.Labs.ModuleLoader.Interfaces",
-        "Unity.Labs.Utils.Editor"
+        "Unity.MARS.Interfaces",
+        "Unity.XRTools.ModuleLoader",
+        "Unity.XRTools.ModuleLoader.Interfaces",
+        "Unity.XRTools.Utils",
+        "Unity.XRTools.Utils.Editor"
     ],
     "includePlatforms": [
         "Editor"
