@@ -2,7 +2,7 @@
 using System.Collections;
 using System.Linq;
 using NUnit.Framework;
-using Unity.Labs.MARS;
+using Unity.MARS;
 using UnityEditor;
 using UnityEditor.SceneManagement;
 using UnityEngine;
