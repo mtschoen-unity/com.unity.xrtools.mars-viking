@@ -5,7 +5,7 @@ namespace MARSViking
     {
         public static class TestControls
         {
-            public const int QueryThreshold = 60;
+            public const int QueryThreshold = 90;
         }
         public static class MarsPanel
         {
