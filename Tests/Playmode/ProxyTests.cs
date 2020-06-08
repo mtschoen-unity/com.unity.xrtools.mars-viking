@@ -3,6 +3,7 @@ using System.Collections;
 using System.Linq;
 using NUnit.Framework;
 using Unity.MARS;
+using Unity.XRTools.ModuleLoader;
 using UnityEditor;
 using UnityEditor.SceneManagement;
 using UnityEngine;
@@ -35,6 +36,11 @@ namespace MARSViking
                    throw;
                }
            }
+           
+           var environmentManager = ModuleLoaderCore.instance.GetModule<MARSEnvironmentManager>();
+           var names = MarsEnvironments.GetEnvironmentNames();
+           var envIndex = names.FindIndex(env => env == "Bedroom_12ftx12ft");
+           environmentManager.TrySetupEnvironmentAndRestartSimulation(envIndex);
         }
 
         [TearDown]

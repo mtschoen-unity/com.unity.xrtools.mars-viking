@@ -2,6 +2,7 @@
 using System.Linq;
 using NUnit.Framework;
 using Unity.MARS;
+using Unity.MARS.Simulation;
 using Unity.XRTools.ModuleLoader;
 using UnityEditor;
 using UnityEditor.SceneManagement;
@@ -20,9 +21,14 @@ namespace MARSViking
         public void SetUp()
         {
             // Reset view before each test
-            EditorApplication.ExecuteMenuItem("Window/Layouts/Default");
+            //EditorApplication.ExecuteMenuItem("Window/Layouts/Default");
             // Create a new scene before each test
             EditorSceneManager.NewScene(NewSceneSetup.EmptyScene, NewSceneMode.Single);
+            
+            var environmentManager = ModuleLoaderCore.instance.GetModule<MARSEnvironmentManager>();
+            var names = MarsEnvironments.GetEnvironmentNames();
+            var envIndex = names.FindIndex(env => env == "Bedroom_12ftx12ft");
+            environmentManager.TrySetupEnvironmentAndRestartSimulation(envIndex);
         }
 
         [TearDown]
@@ -37,6 +43,7 @@ namespace MARSViking
         [NUnit.Framework.Property("TestRailId", "C576069")]
         public void CanCreateProxyFromGameObjectMenu()
         {
+            
             // Create a Proxy using the GameObject Menu
             EditorApplication.ExecuteMenuItem(Constants.GameObjectMarsMenu.CreateProxy);
             // Find all gameObjects in Scene
