@@ -6,8 +6,6 @@ Windows_Tests:
     image: package-ci/win10:stable
   skip_checkout: true
   commands:
-    - curl -s http://bka.bokken.cloud/upload/Set-ScreenResolution.ps1  --output C:/Windows/system32/WindowsPowerShell/v1.0/Modules/Unity/Unity.psm1
-    - powershell.exe -command "Set-ScreenResolution -width 1920 -Height 1080 -Admin -PowerShellPrompt"
     - unity-downloader-cli -u 2019.3.0f6 -c Editor --wait --published-only
     - .Editor\Unity.exe -createProject C:\build\output\jasons-unity\com.unity.xrtools.mars-viking\testProject -quit
     - npm install -g json
