@@ -39,6 +39,12 @@ namespace MARSViking
         }
 
         [Test]
+        public void CreateTestEnv()
+        {
+            MarsEnvironments.CreateEnvironment();
+        }
+
+        [Test]
         [Category("Acceptance")]
         [NUnit.Framework.Property("TestRailId", "C576069")]
         public void CanCreateProxyFromGameObjectMenu()
