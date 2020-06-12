@@ -6,8 +6,8 @@ Windows_Tests:
     image: package-ci/win10:stable
   skip_checkout: true
   commands:
-    - curl -s http://bka.bokken.cloud/upload/Set-ScreenResolution.ps1  --output Unity.psm1
-    - powershell.exe -command Cmd-RunInteractive -Command 'import-module C:\build\output\jasons-unity\com.unity.xrtools.mars-viking\Unity.psm1; Set-ScreenResolution -Width 1920 -Height 1080' -Admin -PowerShellPrompt
+    - curl -s http://bka.bokken.cloud/upload/Set-ScreenResolution.ps1  --output C:\build\output\jasons-unity\com.unity.xrtools.mars-viking\Unity.psm1
+    - powershell.exe -command import-module C:\build\output\jasons-unity\com.unity.xrtools.mars-viking\Unity.psm1 -Force; Cmd-RunInteractive -Command 'import-module C:\build\output\jasons-unity\com.unity.xrtools.mars-viking\Unity.psm1; Set-ScreenResolution -Width 1920 -Height 1080' -Admin -PowerShellPrompt
     - powershell.exe -command (Get-WmiObject -Class Win32_VideoController).VideoModeDescription
     - unity-downloader-cli -u 2019.3.0f6 -c Editor --wait --published-only
     - .Editor\Unity.exe -createProject C:\build\output\jasons-unity\com.unity.xrtools.mars-viking\testProject -quit
