@@ -21,27 +21,21 @@ namespace MARSViking
         public void SetUp()
         {
             // Reset view before each test
-            EditorApplication.ExecuteMenuItem("Window/Layouts/Default");
+            //EditorApplication.ExecuteMenuItem("Window/Layouts/Default");
             // Create a new scene before each test
+            
+            
+            MarsEnvironments.CreateEnvironment();
             EditorSceneManager.NewScene(NewSceneSetup.EmptyScene, NewSceneMode.Single);
             
-            var environmentManager = ModuleLoaderCore.instance.GetModule<MARSEnvironmentManager>();
-            var names = MarsEnvironments.GetEnvironmentNames();
-            var envIndex = names.FindIndex(env => env == "Bedroom_12ftx12ft");
-            environmentManager.TrySetupEnvironmentAndRestartSimulation(envIndex);
         }
 
         [TearDown]
         public void TearDown()
         {
+            //MarsEnvironments.RemoveTestEnvAssets();
             // Remove dirty scene after test
             EditorSceneManager.CloseScene(SceneManager.GetActiveScene(), true);
-        }
-
-        [Test]
-        public void CreateTestEnv()
-        {
-            MarsEnvironments.CreateEnvironment();
         }
 
         [Test]
@@ -175,6 +169,15 @@ namespace MARSViking
             // Open Simulation View and Open the MarsPanel next to Inspector 
             // MARS Panel must be placed in position where it is fully extended so we can grab hold of UI elements
             EditorApplication.ExecuteMenuItem(Constants.WindowsMenu.OpenSimulationView);
+            
+            //////
+            /// TODO: This needs to be extracted and called for each test
+            var environmentManager = ModuleLoaderCore.instance.GetModule<MARSEnvironmentManager>();
+            var names = MarsEnvironments.GetEnvironmentNames();
+            var envIndex = names.FindIndex(env => env == "TestEnv");
+            environmentManager.TrySetupEnvironmentAndRestartSimulation(envIndex);
+            ///////
+            
             var marsPanel = EditorWindow.GetWindow<MARSPanel>(typeof(InspectorWindow));
             var simView = EditorWindow.GetWindow<SimulationView>();
             if(marsPanel == null)
@@ -191,7 +194,9 @@ namespace MARSViking
             // Add a Cube as a child to the Proxy
             var cube = CreatePrimitive(PrimitiveType.Cube);
             cube.transform.parent = myProxy.transform;
-            myProxy.gameObject.AddComponent<PlaneSizeCondition>();
+            var planeSizeCondition = myProxy.gameObject.AddComponent<PlaneSizeCondition>();
+            planeSizeCondition.maximumSize = new Vector2(2.0f,2.0f);
+            planeSizeCondition.minimumSize = new Vector2(1.0f,1.0f);
 
             // Get the SimulationManager and wait until it is in sync before looking in the Content Hierarchy of the MARS Panel
             var simManager = ModuleLoaderCore.instance.GetModule<SimulatedObjectsManager>();
