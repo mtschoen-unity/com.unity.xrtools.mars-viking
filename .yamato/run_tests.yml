@@ -7,8 +7,7 @@ Windows_Tests:
   skip_checkout: true
   commands:
     - curl -s http://bka.bokken.cloud/upload/Set-ScreenResolution.ps1  --output Unity.psm1
-    - dir
-    - powershell.exe -command import-module C:\build\output\jasons-unity\com.unity.xrtools.mars-viking\Unity.psm1 -Force; Cmd-RunInteractive -Command 'import-module C:\build\output\jasons-unity\com.unity.xrtools.mars-viking\Unity.psm1 -Force; Set-ScreenResolution -Width 1920 -Height 1080' -Admin -PowerShellPrompt
+    - powershell.exe -command import-module C:\build\output\jasons-unity\com.unity.xrtools.mars-viking\Unity.psm1 -Force -Verbose; Cmd-RunInteractive -Command 'import-module C:\build\output\jasons-unity\com.unity.xrtools.mars-viking\Unity.psm1 -Force; Set-ScreenResolution -Width 1920 -Height 1080' -Admin -PowerShellPrompt
     - powershell.exe -command (Get-WmiObject -Class Win32_VideoController).VideoModeDescription
   artifacts:
     test_results:
