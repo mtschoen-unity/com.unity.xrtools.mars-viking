@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using Unity.MARS;
+using Unity.XRTools.ModuleLoader;
 using UnityEditor;
 using UnityEditor.VersionControl;
 using UnityEngine;
@@ -30,9 +31,11 @@ public class MarsEnvironments
         //TODO: PlanesExtractionManager.cs must be made public
         //TODO: PlaneExtractionSettings.cs must have setters for it's properties
         //TODO: SimEnv must have a ceiling or some depth to extract planes
+        //TODO: Modify MARSEnvironmentManager.cs with Juan's changes to add CurrentEnvironmentModifiedBehavior
         var newEnv = new GameObject();
         var settings = newEnv.AddComponent<MARSEnvironmentSettings>();
         var sceneView = SceneView.lastActiveSceneView;
+        settings.EnvironmentInfo.EnvironmentBounds = new Bounds(new Vector3(0.99f, 5f, 1f), new Vector3(1f, 5f, 1f) );
         settings.SetDefaultEnvironmentCamera(sceneView, false);
         
         var planeExtractionSettings = newEnv.GetComponent<PlaneExtractionSettings>();
@@ -120,7 +123,9 @@ public class MarsEnvironments
         AssetDatabase.SaveAssets();
 
         content.transform.parent = newEnv.transform;
+        content.layer = 3;
         content2.transform.parent = newEnv.transform;
+        content2.layer = 3;
 
         string envlocalPath = "Assets/" + newEnv.name + ".prefab";
 
@@ -130,6 +135,7 @@ public class MarsEnvironments
         PrefabUtility.SaveAsPrefabAsset(newEnv, envlocalPath);
         var asset = AssetDatabase.LoadMainAssetAtPath(envlocalPath);
         AssetDatabase.SetLabels(asset, new string[]{"Environment"});
+        AssetDatabase.SaveAssets();
         
     }
 
@@ -138,19 +144,5 @@ public class MarsEnvironments
         AssetDatabase.DeleteAsset("Assets/floorMesh");
         AssetDatabase.DeleteAsset("Assets/ceilingMesh");
         AssetDatabase.DeleteAsset("Assets/testEnv.prefab");
-    }
-
-    [MenuItem("jason/save")]
-    public static void ApplyOverrides()
-    {
-        var asset = PrefabUtility.LoadPrefabContents("Assets/TestEnv.prefab");
-        PrefabUtility.SaveAsPrefabAsset(asset, "Assets/TestEnv.prefab");
-        
-    }
-
-    [MenuItem("jason/create")]
-    public static void Create()
-    {
-        CreateEnvironment();
     }
 }

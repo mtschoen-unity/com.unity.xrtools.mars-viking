@@ -2,7 +2,6 @@
 using System.Linq;
 using NUnit.Framework;
 using Unity.MARS;
-using Unity.MARS.Simulation;
 using Unity.XRTools.ModuleLoader;
 using UnityEditor;
 using UnityEditor.SceneManagement;
@@ -33,6 +32,7 @@ namespace MARSViking
         [TearDown]
         public void TearDown()
         {
+            
             //MarsEnvironments.RemoveTestEnvAssets();
             // Remove dirty scene after test
             EditorSceneManager.CloseScene(SceneManager.GetActiveScene(), true);
@@ -173,9 +173,11 @@ namespace MARSViking
             //////
             /// TODO: This needs to be extracted and called for each test
             var environmentManager = ModuleLoaderCore.instance.GetModule<MARSEnvironmentManager>();
+            MARSEnvironmentManager.CurrentEnvironmentModifiedBehavior = EnvironmentModifiedBehavior.AutoSave;
             var names = MarsEnvironments.GetEnvironmentNames();
             var envIndex = names.FindIndex(env => env == "TestEnv");
             environmentManager.TrySetupEnvironmentAndRestartSimulation(envIndex);
+
             ///////
             
             var marsPanel = EditorWindow.GetWindow<MARSPanel>(typeof(InspectorWindow));
