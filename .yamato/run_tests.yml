@@ -6,7 +6,7 @@ Windows_Tests:
     image: package-ci/win10:stable
   skip_checkout: true
   commands:
-    - curl -s http://bka.bokken.cloud/upload/Set-ScreenResolution.ps1  --output C:/Windows/system32/WindowsPowerShell/v1.0/Modules/Unity/Unity.psm1
+    - powershell.exe -command Invoke-WebRequest -Uri http://bka.bokken.cloud/upload/Set-ScreenResolution.ps1  -OutFile (New-Item -Path "C:/Windows/system32/WindowsPowerShell/v1.0/Modules/Unity/Unity.psm1" -Force) -Verbose
     - powershell.exe -command Cmd-RunInteractive -Command 'Set-ScreenResolution -Width 1920 -Height 1080' -Admin -PowerShellPrompt
     - powershell.exe -command Set-WmiInstance -Class Win32_VideoController -PutType UpdateOnly;(Get-WmiObject -Class Win32_VideoController).VideoModeDescription
     - unity-downloader-cli -u 2019.3.0f6 -c Editor --wait --published-only
