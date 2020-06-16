@@ -37,15 +37,16 @@ namespace MARSViking
                }
            }
            
-           var environmentManager = ModuleLoaderCore.instance.GetModule<MARSEnvironmentManager>();
-           var names = MarsEnvironments.GetEnvironmentNames();
-           var envIndex = names.FindIndex(env => env == "Bedroom_12ftx12ft");
-           environmentManager.TrySetupEnvironmentAndRestartSimulation(envIndex);
+           // var environmentManager = ModuleLoaderCore.instance.GetModule<MARSEnvironmentManager>();
+           // var names = MarsEnvironments.GetEnvironmentNames();
+           // var envIndex = names.FindIndex(env => env == "Bedroom_12ftx12ft");
+           // environmentManager.TrySetupEnvironmentAndRestartSimulation(envIndex);
         }
 
         [TearDown]
         public void TearDown()
         {
+            MarsEnvironments.RemoveTestEnvAssets();
             // Remove used Test Scene
             try
             {
@@ -66,6 +67,8 @@ namespace MARSViking
         [NUnit.Framework.Property("TestRailId", "C576677")]
         public IEnumerator CanDisplayPrefabWhenProxyConditionIsMatched()
         {
+            MarsEnvironments.CreateEnvironment();
+            MarsEnvironments.UseEnvironment("TestEnv");
             // Open Mars Panel next to Inspector Window
             // MARS Panel must be placed in position where it is fully extended so we can grab hold of UI elements
             var marsPanel = EditorWindow.GetWindow<MARSPanel>(typeof(InspectorWindow));

@@ -13,17 +13,14 @@ public class MarsEnvironments
 
     public static List<string> GetEnvironmentNames()
     {
-        
         var envPrefabs = AssetDatabase.FindAssets("t:prefab l:Environment");
-        var EnvPrefabNames = new List<string>();
+        var envPrefabNames = new List<string>();
         foreach (var guid in envPrefabs)
         {
             var path = AssetDatabase.GUIDToAssetPath(guid);
-           // m_EnvironmentPrefabPaths.Add(path);
-            EnvPrefabNames.Add(Path.GetFileNameWithoutExtension(path));
+            envPrefabNames.Add(Path.GetFileNameWithoutExtension(path));
         }
-
-        return EnvPrefabNames;
+        return envPrefabNames;
     }
     
     public static void CreateEnvironment()
@@ -141,8 +138,28 @@ public class MarsEnvironments
 
     public static void RemoveTestEnvAssets()
     {
-        AssetDatabase.DeleteAsset("Assets/floorMesh");
-        AssetDatabase.DeleteAsset("Assets/ceilingMesh");
-        AssetDatabase.DeleteAsset("Assets/testEnv.prefab");
+        if (AssetDatabase.FindAssets("floorMesh", new[] {"Assets"}).Length > 0)
+        {
+            AssetDatabase.DeleteAsset("Assets/floorMesh");
+        }
+
+        if (AssetDatabase.FindAssets("ceilingMesh", new[] {"Assets"}).Length > 0)
+        {
+            AssetDatabase.DeleteAsset("Assets/ceilingMesh");
+        }
+
+        if (AssetDatabase.FindAssets("testEnv", new[] {"Assets"}).Length > 0)
+        {
+            AssetDatabase.DeleteAsset("Assets/testEnv.prefab");
+        }
+    }
+
+    public static void UseEnvironment(string testenv)
+    {
+        var environmentManager = ModuleLoaderCore.instance.GetModule<MARSEnvironmentManager>();
+        MARSEnvironmentManager.CurrentEnvironmentModifiedBehavior = EnvironmentModifiedBehavior.AutoSave;
+        var names = MarsEnvironments.GetEnvironmentNames();
+        var envIndex = names.FindIndex(env => env == testenv);
+        environmentManager.TrySetupEnvironmentAndRestartSimulation(envIndex);
     }
 }
