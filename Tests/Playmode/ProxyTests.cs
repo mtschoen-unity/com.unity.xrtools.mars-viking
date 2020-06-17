@@ -22,7 +22,8 @@ namespace MARSViking
         {
             // Reset Layout to make sure no Views are open that shouldn't be
            EditorApplication.ExecuteMenuItem("Window/Layouts/Default");
-           
+           MarsEnvironments.CreateEnvironment();
+
            // Create a clean scene to test with
            try
            {
@@ -67,8 +68,15 @@ namespace MARSViking
         [NUnit.Framework.Property("TestRailId", "C576677")]
         public IEnumerator CanDisplayPrefabWhenProxyConditionIsMatched()
         {
-            MarsEnvironments.CreateEnvironment();
-            MarsEnvironments.UseEnvironment("TestEnv");
+
+            EditorApplication.ExecuteMenuItem(Constants.WindowsMenu.OpenSimulationView);
+            
+            var environmentManager = ModuleLoaderCore.instance.GetModule<MARSEnvironmentManager>();
+            MARSEnvironmentManager.CurrentEnvironmentModifiedBehavior = EnvironmentModifiedBehavior.AutoSave;
+            var names = MarsEnvironments.GetEnvironmentNames();
+            var envIndex = names.FindIndex(env => env == "TestEnv");
+            environmentManager.TrySetupEnvironmentAndRestartSimulation(envIndex);
+            
             // Open Mars Panel next to Inspector Window
             // MARS Panel must be placed in position where it is fully extended so we can grab hold of UI elements
             var marsPanel = EditorWindow.GetWindow<MARSPanel>(typeof(InspectorWindow));

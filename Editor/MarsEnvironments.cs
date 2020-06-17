@@ -8,7 +8,7 @@ using UnityEditor;
 using UnityEditor.VersionControl;
 using UnityEngine;
 
-public class MarsEnvironments 
+public class MarsEnvironments
 {
 
     public static List<string> GetEnvironmentNames()
@@ -20,9 +20,10 @@ public class MarsEnvironments
             var path = AssetDatabase.GUIDToAssetPath(guid);
             envPrefabNames.Add(Path.GetFileNameWithoutExtension(path));
         }
+
         return envPrefabNames;
     }
-    
+
     public static void CreateEnvironment()
     {
         //TODO: PlanesExtractionManager.cs must be made public
@@ -31,12 +32,20 @@ public class MarsEnvironments
         //TODO: Modify MARSEnvironmentManager.cs with Juan's changes to add CurrentEnvironmentModifiedBehavior
         var newEnv = new GameObject();
         var settings = newEnv.AddComponent<MARSEnvironmentSettings>();
-        var sceneView = SceneView.lastActiveSceneView;
-        settings.EnvironmentInfo.EnvironmentBounds = new Bounds(new Vector3(0.99f, 5f, 1f), new Vector3(1f, 5f, 1f) );
-        settings.SetDefaultEnvironmentCamera(sceneView, false);
+        var mySceneView = SceneView.lastActiveSceneView;
+        //TODO: bug https://github.com/UnityLabs/mars-project/issues/750
+        //settings.EnvironmentInfo.EnvironmentBounds = new Bounds(new Vector3(0.99f, 5f, 1f), new Vector3(1f, 5f, 1f));
+
         
+        mySceneView.camera.transform.position = new Vector3(-0.164f,0.834f,-0.350f);
+        mySceneView.camera.transform.rotation = new Quaternion(0.298f, 0.339f, -0.113f, 0.884f);
+        // Simulation View camera 
+        settings.SetDefaultEnvironmentCamera(mySceneView, true);
+        // PlayMode camera
+        settings.SetSimulationStartingPose(new Pose(new Vector3(2f, 2.6f,2f), new Quaternion(-0.164f,0.834f,-0.350f, -0.390f)), false);
+
         var planeExtractionSettings = newEnv.GetComponent<PlaneExtractionSettings>();
-        
+
         var vox = new PlaneVoxelGenerationParams()
         {
             raycastSeed = 0,
@@ -64,59 +73,61 @@ public class MarsEnvironments
         Mesh mesh = new Mesh();
         var content = new GameObject();
         content.name = "Floor";
-        content.AddComponent<MeshRenderer>();
+        var meshRend = content.AddComponent<MeshRenderer>();
+        meshRend.material = Material.GetDefaultMaterial();
         content.AddComponent<MeshFilter>();
-        
+
         Vector3[] vertices = new Vector3[]
         {
-            new Vector3(0,0,0),
-            new Vector3(0,0,2),
-            new Vector3(2,0,0),
-            new Vector3(2,0,2)
+            new Vector3(0, 0, 0),
+            new Vector3(0, 0, 2),
+            new Vector3(2, 0, 0),
+            new Vector3(2, 0, 2)
         };
         int[] triangles = new int[]
         {
-            0,1,2,
-            1,3,2
+            0, 1, 2,
+            1, 3, 2
         };
-        
-        
+
+
         mesh.vertices = vertices;
         mesh.triangles = triangles;
         mesh.RecalculateNormals();
         mesh.name = "Meshy";
         
+
         content.GetComponent<MeshFilter>().sharedMesh = mesh;
-        AssetDatabase.CreateAsset(mesh,"Assets/floorMesh");
+        AssetDatabase.CreateAsset(mesh, "Assets/floorMesh");
         AssetDatabase.SaveAssets();
-        
+
         Mesh mesh2 = new Mesh();
         var content2 = new GameObject();
         content2.name = "Ceiling";
         content2.AddComponent<MeshRenderer>();
         content2.AddComponent<MeshFilter>();
-        
+
         Vector3[] vertices2 = new Vector3[]
         {
-            new Vector3(0,10,0),
-            new Vector3(0,10,2),
-            new Vector3(2,10,0),
-            new Vector3(2,10,2)
+            new Vector3(0, 10, 0),
+            new Vector3(0, 10, 2),
+            new Vector3(2, 10, 0),
+            new Vector3(2, 10, 2)
         };
         int[] triangles2 = new int[]
         {
-            0,1,2,
-            1,3,2
+            0, 1, 2,
+            1, 3, 2
         };
-        
-        
+
+
         mesh2.vertices = vertices2;
         mesh2.triangles = triangles2;
         mesh2.RecalculateNormals();
         mesh2.name = "Meshy";
-        
+
         content2.GetComponent<MeshFilter>().sharedMesh = mesh2;
-        AssetDatabase.CreateAsset(mesh2,"Assets/ceilingMesh");
+        AssetDatabase.CreateAsset(mesh2, "Assets/ceilingMesh");
         AssetDatabase.SaveAssets();
 
         content.transform.parent = newEnv.transform;
@@ -128,12 +139,13 @@ public class MarsEnvironments
 
         envlocalPath = AssetDatabase.GenerateUniqueAssetPath(envlocalPath);
         PlanesExtractionManager.ExtractPlanes(planeExtractionSettings);
-        
+
         PrefabUtility.SaveAsPrefabAsset(newEnv, envlocalPath);
         var asset = AssetDatabase.LoadMainAssetAtPath(envlocalPath);
-        AssetDatabase.SetLabels(asset, new string[]{"Environment"});
+        AssetDatabase.SetLabels(asset, new string[] {"Environment"});
         AssetDatabase.SaveAssets();
-        
+
+        Object.DestroyImmediate(newEnv, false);
     }
 
     public static void RemoveTestEnvAssets()
@@ -162,4 +174,22 @@ public class MarsEnvironments
         var envIndex = names.FindIndex(env => env == testenv);
         environmentManager.TrySetupEnvironmentAndRestartSimulation(envIndex);
     }
+
+    [MenuItem("jason/Create")]
+    public static void Create()
+    {
+        CreateEnvironment();
+    }
+
+    [MenuItem("jason/save")]
+    public static void Save()
+    {
+        var GOs = Object.FindObjectsOfType<GameObject>().ToList();
+        var newEnv = GOs.Find(go => go.name == "TestEnv");
+        var settings = newEnv.GetComponent<MARSEnvironmentSettings>();
+
+        var sceneView = Resources.FindObjectsOfTypeAll<SceneView>();
+        settings.SetDefaultEnvironmentCamera(sceneView[0], false);
+    }
+
 }

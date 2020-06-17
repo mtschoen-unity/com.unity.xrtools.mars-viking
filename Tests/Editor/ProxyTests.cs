@@ -21,8 +21,9 @@ namespace MARSViking
         {
             // Reset view before each test
             EditorApplication.ExecuteMenuItem("Window/Layouts/Default");
-            // Create a new scene before each test
+            MarsEnvironments.CreateEnvironment();
             
+            // Create a new scene before each test
             EditorSceneManager.NewScene(NewSceneSetup.EmptyScene, NewSceneMode.Single);
             
         }
@@ -159,16 +160,20 @@ namespace MARSViking
         [UnityTest]
         [Category("Use Case")]
         [NUnit.Framework.Property("TestRailId", "C576677")]
-        public IEnumerator CanDisplayPrefabWhenProxyConditionIsMatched()
+        public IEnumerator SomeOtherTest()
         {
             AutomatedIMElement proxyObject;
-            MarsEnvironments.CreateEnvironment();
             
+
             // Open Simulation View and Open the MarsPanel next to Inspector 
             // MARS Panel must be placed in position where it is fully extended so we can grab hold of UI elements
             EditorApplication.ExecuteMenuItem(Constants.WindowsMenu.OpenSimulationView);
             
-            MarsEnvironments.UseEnvironment("TestEnv");
+            var environmentManager = ModuleLoaderCore.instance.GetModule<MARSEnvironmentManager>();
+            MARSEnvironmentManager.CurrentEnvironmentModifiedBehavior = EnvironmentModifiedBehavior.AutoSave;
+            var names = MarsEnvironments.GetEnvironmentNames();
+            var envIndex = names.FindIndex(env => env == "TestEnv");
+            environmentManager.TrySetupEnvironmentAndRestartSimulation(envIndex);
 
             var marsPanel = EditorWindow.GetWindow<MARSPanel>(typeof(InspectorWindow));
             var simView = EditorWindow.GetWindow<SimulationView>();
