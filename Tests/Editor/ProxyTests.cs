@@ -21,7 +21,7 @@ namespace MARSViking
         {
             // Reset view before each test
             EditorApplication.ExecuteMenuItem("Window/Layouts/Default");
-            MarsEnvironments.CreateEnvironment();
+            EnvironmentBuilder.CreateEnvironment();
             
             // Create a new scene before each test
             EditorSceneManager.NewScene(NewSceneSetup.EmptyScene, NewSceneMode.Single);
@@ -31,7 +31,7 @@ namespace MARSViking
         [TearDown]
         public void TearDown()
         {
-            MarsEnvironments.RemoveTestEnvAssets();
+            EnvironmentBuilder.RemoveTestEnvAssets();
             // Remove dirty scene after test
             EditorSceneManager.CloseScene(SceneManager.GetActiveScene(), true);
         }
@@ -169,11 +169,7 @@ namespace MARSViking
             // MARS Panel must be placed in position where it is fully extended so we can grab hold of UI elements
             EditorApplication.ExecuteMenuItem(Constants.WindowsMenu.OpenSimulationView);
             
-            var environmentManager = ModuleLoaderCore.instance.GetModule<MARSEnvironmentManager>();
-            MARSEnvironmentManager.CurrentEnvironmentModifiedBehavior = EnvironmentModifiedBehavior.AutoSave;
-            var names = MarsEnvironments.GetEnvironmentNames();
-            var envIndex = names.FindIndex(env => env == "TestEnv");
-            environmentManager.TrySetupEnvironmentAndRestartSimulation(envIndex);
+            EnvironmentBuilder.UseEnvironment("TestEnv");
 
             var marsPanel = EditorWindow.GetWindow<MARSPanel>(typeof(InspectorWindow));
             var simView = EditorWindow.GetWindow<SimulationView>();

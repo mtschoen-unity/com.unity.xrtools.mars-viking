@@ -22,7 +22,8 @@ namespace MARSViking
         {
             // Reset Layout to make sure no Views are open that shouldn't be
            EditorApplication.ExecuteMenuItem("Window/Layouts/Default");
-           MarsEnvironments.CreateEnvironment();
+           
+           EnvironmentBuilder.CreateEnvironment();
 
            // Create a clean scene to test with
            try
@@ -37,17 +38,12 @@ namespace MARSViking
                    throw;
                }
            }
-           
-           // var environmentManager = ModuleLoaderCore.instance.GetModule<MARSEnvironmentManager>();
-           // var names = MarsEnvironments.GetEnvironmentNames();
-           // var envIndex = names.FindIndex(env => env == "Bedroom_12ftx12ft");
-           // environmentManager.TrySetupEnvironmentAndRestartSimulation(envIndex);
         }
 
         [TearDown]
         public void TearDown()
         {
-            MarsEnvironments.RemoveTestEnvAssets();
+            EnvironmentBuilder.RemoveTestEnvAssets();
             // Remove used Test Scene
             try
             {
@@ -68,14 +64,10 @@ namespace MARSViking
         [NUnit.Framework.Property("TestRailId", "C576677")]
         public IEnumerator CanDisplayPrefabWhenProxyConditionIsMatched()
         {
-
+            // SimView must be open before selecting a sim env below
             EditorApplication.ExecuteMenuItem(Constants.WindowsMenu.OpenSimulationView);
             
-            var environmentManager = ModuleLoaderCore.instance.GetModule<MARSEnvironmentManager>();
-            MARSEnvironmentManager.CurrentEnvironmentModifiedBehavior = EnvironmentModifiedBehavior.AutoSave;
-            var names = MarsEnvironments.GetEnvironmentNames();
-            var envIndex = names.FindIndex(env => env == "TestEnv");
-            environmentManager.TrySetupEnvironmentAndRestartSimulation(envIndex);
+            EnvironmentBuilder.UseEnvironment("TestEnv");
             
             // Open Mars Panel next to Inspector Window
             // MARS Panel must be placed in position where it is fully extended so we can grab hold of UI elements
