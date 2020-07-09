@@ -68,8 +68,8 @@ namespace MARSViking
                 checkEmptyArea = true,
                 allowedEmptyAreaCurve = new AnimationCurve(new Keyframe(0, 0), new Keyframe(1, 1))
             };
-            planeExtractionSettings.VoxelGenerationParams = vox;
-            planeExtractionSettings.PlaneFindingParams = voxFind;
+            //planeExtractionSettings.VoxelGenerationParams = vox;
+            //planeExtractionSettings.PlaneFindingParams = voxFind;
 
             newEnv.name = "TestEnv";
 
@@ -175,7 +175,7 @@ namespace MARSViking
         {
             var environmentManager = ModuleLoaderCore.instance.GetModule<MARSEnvironmentManager>();
             //TODO: below line waiting on https://github.com/UnityLabs/com.unity.labs.mars/pull/1139
-            MARSEnvironmentManager.CurrentEnvironmentModifiedBehavior = EnvironmentModifiedBehavior.AutoSave;
+            //MARSEnvironmentManager.CurrentEnvironmentModifiedBehavior = EnvironmentModifiedBehavior.AutoSave;
             var names = EnvironmentBuilder.GetEnvironmentNames();
             var envIndex = names.FindIndex(env => env == testenv);
             environmentManager.TrySetupEnvironmentAndRestartSimulation(envIndex);

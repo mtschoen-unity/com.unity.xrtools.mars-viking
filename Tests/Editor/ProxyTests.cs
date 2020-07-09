@@ -20,7 +20,7 @@ namespace MARSViking
         public void SetUp()
         {
             // Reset view before each test
-            EditorApplication.ExecuteMenuItem("Window/Layouts/Default");
+            //EditorApplication.ExecuteMenuItem("Window/Layouts/Default");
             EnvironmentBuilder.CreateEnvironment();
             
             // Create a new scene before each test
