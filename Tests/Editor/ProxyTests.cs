@@ -160,7 +160,7 @@ namespace MARSViking
         [UnityTest]
         [Category("Use Case")]
         [NUnit.Framework.Property("TestRailId", "C576677")]
-        public IEnumerator SomeOtherTest()
+        public IEnumerator CanDisplayPrefabWhenProxyConditionIsMatched()
         {
             AutomatedIMElement proxyObject;
             
