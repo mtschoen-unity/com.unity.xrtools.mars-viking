@@ -10,16 +10,29 @@
         "Unity.XRTools.Utils",
         "Unity.XRTools.ModuleLoader",
         "Unity.XRTools.ModuleLoader.Interfaces",
-        "Unity.XRTools.Utils.Editor"
+        "Unity.XRTools.Utils.Editor",
+        ""
     ],
     "includePlatforms": [
         "Editor"
     ],
     "excludePlatforms": [],
-    "allowUnsafeCode": false,
+    "allowUnsafeCode": true,
     "overrideReferences": true,
     "precompiledReferences": [
-        "nunit.framework.dll"
+        "nunit.framework.dll",
+        "Appium.Net.dll",
+        "Castle.Core.dll",
+        "Newtonsoft.Json.dll",
+        "SeleniumExtras.PageObjects.dll",
+        "System.Drawing.Common.dll",
+        "WebDriver.dll",
+        "WebDriver.Support.dll",
+        "CssParser.dll",
+        "Eyes.Sdk.Core.DotNet.dll",
+        "BrotliSharpLib.dll",
+        "HtmlAgilityPack.dll",
+        "Eyes.Selenium.DotNet.dll"
     ],
     "autoReferenced": false,
     "defineConstraints": [

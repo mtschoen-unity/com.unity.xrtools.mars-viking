@@ -54,3 +54,32 @@ The tool can be downloaded by using the script found in (this)[https://github.cd
 ```
 utr --suite=editor --suite=playmode --testproject=/my/project/path --editor-location=/Applications/Unity/Hub/Editor/2019.3.0f6/ --artifacts_path=/my/test/results/path
 ```
+
+# Mobile
+## Dependencies
+Castle.Core (>= 4.3.1)
+DotNetSeleniumExtras.PageObjects (>= 3.11.0)
+Newtonsoft.Json (>= 12.0.1)
+Selenium.Support (>= 3.141.0)
+Selenium.WebDriver (>= 3.141.0)
+System.Drawing.Common (>= 4.5.1)
+
+Eyes.Selenioum 2.30.0
+Eyes.Sdk.Core 2.30.0
+brotlisharplib.0.3.3
+htmlagilitypack.1.11.21
+System.Runtime.CompilerServices.Unsafe 4.5.2
+
+## Appium setup
+### ~/.zshrc
+export JAVA_HOME="/Library/Java/JavaVirtualMachines/jdk1.8.0_201.jdk/Contents/Home"
+export PATH=$PATH:$JAVA_HOME/bin
+export ANDROID_HOME="/Users/[USERNAME]/Library/Android/sdk"
+export PATH=/Users/[USERNAME]/Library/Android/sdk/platform-tools:$PATH
+
+### Appium Doctor
+To test configuations for Android :
+```
+sudo npm install appium-doctor -g
+appium-doctor --android
+```
