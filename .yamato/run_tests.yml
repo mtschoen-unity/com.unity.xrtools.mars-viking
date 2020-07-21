@@ -1,5 +1,5 @@
 Windows_Companion_Tests:
-  name: Windows 2019.3.0f6 Tests
+  name: Windows 2019.3.0f6 Tests Companion
   agent:
     type: Unity::VM
     flavor: b1.large
@@ -27,7 +27,7 @@ Windows_Companion_Tests:
             - "master"
 
 MacOS_Companion_Tests:
-  name: MacOS 2019.3.0f6 Tests
+  name: MacOS 2019.3.0f6 Tests Companion
   agent:
     type: Unity::VM::osx
     image: package-ci/mac:stable
@@ -56,7 +56,7 @@ MacOS_Companion_Tests:
             - "master"
 
 Windows_MARS_Tests:
-  name: Windows 2019.3.0f6 Tests
+  name: Windows 2019.3.0f6 Tests MARS
   agent:
     type: Unity::VM
     flavor: b1.large
@@ -86,7 +86,7 @@ Windows_MARS_Tests:
             - "master"
 
 MacOS_MARS_Tests:
-  name: MacOS 2019.3.0f6 Tests
+  name: MacOS 2019.3.0f6 Tests MARS
   agent:
     type: Unity::VM::osx
     image: package-ci/mac:stable
@@ -113,7 +113,7 @@ MacOS_MARS_Tests:
             - "master"
 
 MARS_Test_Trigger:
-  name: Tests Trigger
+  name: Tests Trigger MARS
   agent:
     type: Unity::VM
     image: package-ci/win10:stable
@@ -129,7 +129,7 @@ MARS_Test_Trigger:
     - .yamato/run_tests.yml#MacOS__MARS_Tests
 
 Companion_Test_Trigger:
-  name: Tests Trigger
+  name: Tests Trigger Companion
   agent:
     type: Unity::VM
     image: package-ci/win10:stable
