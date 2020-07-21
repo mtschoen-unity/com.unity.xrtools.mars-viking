@@ -12,9 +12,9 @@ using static UnityEngine.GameObject;
 using Object = UnityEngine.Object;
 
 // ReSharper disable once CheckNamespace
-namespace MARSViking
+namespace MARSViking.MARS.Editor
 {
-    public class EditorProxyTests
+    public class ProxyTests
     {
         [SetUp]
         public void SetUp()
