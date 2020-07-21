@@ -1,8 +1,9 @@
-﻿﻿﻿using System.IO;
-  using System.Linq;
-  using UnityEditor;
-  using UnityEngine;
+﻿using System.IO;
+using System.Linq;
+using UnityEditor;
+using UnityEngine;
 
+// ReSharper disable once CheckNamespace
 namespace MARSViking
 {
     public class Init : MonoBehaviour
@@ -12,9 +13,9 @@ namespace MARSViking
         {
             Debug.Log("Init Viking");
             
-            string ProjectRootPath = Directory.GetCurrentDirectory();
-            string ProjectManifestPath = Path.Combine(ProjectRootPath, "Packages", "manifest.json");
-            var lines = File.ReadAllLines(ProjectManifestPath).ToList();
+            var projectRootPath = Directory.GetCurrentDirectory();
+            var projectManifestPath = Path.Combine(projectRootPath, "Packages", "manifest.json");
+            var lines = File.ReadAllLines(projectManifestPath).ToList();
             var viking = lines.Find(l => l.Contains("com.unity.xrtools.mars-viking") && !l.Contains(":"));
             
             if (viking != null)
@@ -49,7 +50,7 @@ namespace MARSViking
                 lines.Insert(lines.Count - 1, "\"testables\": [\"com.unity.xrtools.mars-viking\"]");
             }
 
-            File.WriteAllLines(ProjectManifestPath, lines);
+            File.WriteAllLines(projectManifestPath, lines);
             
         }
     }

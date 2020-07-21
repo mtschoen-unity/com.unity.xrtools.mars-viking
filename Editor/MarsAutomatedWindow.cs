@@ -5,7 +5,7 @@ using UnityEditor;
 using UnityEditor.UIAutomation;
 using UnityEngine;
 
-namespace MARSViking
+namespace MARSViking.MARS
 {
     class MarsAutomatedWindow<T> : IElementFinder, IDisposable where T : EditorWindow
     {

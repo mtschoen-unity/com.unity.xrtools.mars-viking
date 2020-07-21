@@ -1,5 +1,5 @@
 ﻿// ReSharper disable once CheckNamespace
-namespace MARSViking
+namespace MARSViking.MARS
 {
     public static class Constants
     {

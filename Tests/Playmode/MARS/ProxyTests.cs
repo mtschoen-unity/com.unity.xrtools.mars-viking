@@ -11,9 +11,9 @@ using UnityEngine.TestTools;
 using Object = UnityEngine.Object;
 
 // ReSharper disable once CheckNamespace
-namespace MARSViking
+namespace MARSViking.MARS.Playmode
 {
-    public class PlaymodeProxyTests
+    public class ProxyTests
     {
 
         [SetUp]
