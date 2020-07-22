@@ -1,4 +1,4 @@
-﻿using NUnit.Framework;
+﻿using System.Reflection;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -6,7 +6,7 @@ using UnityEngine.UI;
 // ReSharper disable once CheckNamespace
 namespace MARSViking.Companion
 {
-    public static class ProjectListScreenPageObject
+    public class ProjectListScreenPageObject: PageObject
     {
         private const string ProjectListScreenPath = "Menus/SafeArea/ProjectListMenu";
 
@@ -15,9 +15,10 @@ namespace MARSViking.Companion
             get
             {
                 var go = GameObject.Find(ProjectListScreenPath);
-                if (go == null)
-                    Assert.Inconclusive("ProjectListScreen is missing");
-                return go;
+                return IsFound(
+                    go, 
+                    MethodBase.GetCurrentMethod().Name.Replace("get_", ""), 
+                    MethodBase.GetCurrentMethod().DeclaringType.Name.Replace("PageObject", "")) ? go : null;
             }
         }
 
@@ -25,10 +26,11 @@ namespace MARSViking.Companion
         {
             get
             {
-                var go = GameObject.Find($"{ProjectListScreenPath}/Header/Link Account Button").GetComponent<Button>();
-                if (go == null)
-                    Assert.Inconclusive("LinkAccountButton on the ProjectListScreen is missing");
-                return go;
+                var go = GameObject.Find($"{ProjectListScreenPath}/Header/Link Account Button");
+                return IsFound(
+                    go, 
+                    MethodBase.GetCurrentMethod().Name.Replace("get_", ""), 
+                    MethodBase.GetCurrentMethod().DeclaringType.Name.Replace("PageObject", "")) ? go.GetComponent<Button>() : null;
             }
         }
 
@@ -36,11 +38,11 @@ namespace MARSViking.Companion
         {
             get
             {
-                var go = GameObject.Find($"{ProjectListScreenPath}/Header/Link Account Button/Text")
-                    .GetComponent<TMP_Text>();
-                if (go == null)
-                    Assert.Inconclusive("LinkAccountButtonText on the ProjectListScreen is missing");
-                return go;
+                var go = GameObject.Find($"{ProjectListScreenPath}/Header/Link Account Button/Text");
+                return IsFound(
+                    go, 
+                    MethodBase.GetCurrentMethod().Name.Replace("get_", ""), 
+                    MethodBase.GetCurrentMethod().DeclaringType.Name.Replace("PageObject", "")) ? go.GetComponent<TMP_Text>() : null;
             }
         }
 
@@ -48,10 +50,11 @@ namespace MARSViking.Companion
         {
             get
             {
-                var go = GameObject.Find($"{ProjectListScreenPath}/Header/Select Button").GetComponent<Button>();
-                if (go == null)
-                    Assert.Inconclusive("SelectButton on the ProjectListScreen is missing");
-                return go;
+                var go = GameObject.Find($"{ProjectListScreenPath}/Header/Select Button");
+                return IsFound(
+                    go, 
+                    MethodBase.GetCurrentMethod().Name.Replace("get_", ""), 
+                    MethodBase.GetCurrentMethod().DeclaringType.Name.Replace("PageObject", "")) ? go.GetComponent<Button>() : null;
             }
         }
     }

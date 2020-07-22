@@ -1,11 +1,12 @@
-﻿using NUnit.Framework;
+﻿using System.Reflection;
+using NUnit.Framework;
 using UnityEngine;
 using UnityEngine.UI;
 
 // ReSharper disable once CheckNamespace
 namespace MARSViking.Companion
 {
-    public static class WelcomeScreenPageObject
+    public class WelcomeScreenPageObject: PageObject
     {
         private const string WelcomeScreenPath = "Menus/SafeArea/Welcome Screen";
 
@@ -14,9 +15,10 @@ namespace MARSViking.Companion
             get
             {
                 var go = GameObject.Find(WelcomeScreenPath);
-                if (go == null)
-                    Assert.Inconclusive("WelcomeScreen is missing");
-                return go;
+                return IsFound(
+                    go, 
+                    MethodBase.GetCurrentMethod().Name.Replace("get_", ""), 
+                    MethodBase.GetCurrentMethod().DeclaringType.Name.Replace("PageObject", "")) ? go : null;
             }
         }
 
@@ -24,10 +26,11 @@ namespace MARSViking.Companion
         {
             get
             {
-                var go = GameObject.Find($"{WelcomeScreenPath}/Link Account").GetComponent<Button>();
-                if (go == null)
-                    Assert.Inconclusive("LinkAccountButton on the WelcomeScreen is missing");
-                return go;
+                var go = GameObject.Find($"{WelcomeScreenPath}/Link Account");
+                return IsFound(
+                    go, 
+                    MethodBase.GetCurrentMethod().Name.Replace("get_", ""), 
+                    MethodBase.GetCurrentMethod().DeclaringType.Name.Replace("PageObject", "")) ? go.GetComponent<Button>() : null;
             }
         }
     }

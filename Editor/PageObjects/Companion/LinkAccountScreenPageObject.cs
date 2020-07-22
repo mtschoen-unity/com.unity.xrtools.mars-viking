@@ -1,4 +1,5 @@
-﻿using NUnit.Framework;
+﻿using System.Reflection;
+using NUnit.Framework;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -6,7 +7,7 @@ using UnityEngine.UI;
 // ReSharper disable once CheckNamespace
 namespace MARSViking.Companion
 {
-    public static class LinkAccountScreenPageObject
+    public class LinkAccountScreenPageObject: PageObject
     {
         private const string LinkAccountScreenPath = "Menus/SafeArea/Link Account";
 
@@ -14,10 +15,11 @@ namespace MARSViking.Companion
         {
             get
             {
-                var go = GameObject.Find($"{LinkAccountScreenPath}/Scan View/Bottom ThreeRows/Row Middle/API Key Field/Input Field");
-                if (go == null)
-                    Assert.Inconclusive($"LinkAccountScreen is missing");
-                return go;
+                var go = GameObject.Find($"{LinkAccountScreenPath}");
+                return IsFound(
+                    go, 
+                    MethodBase.GetCurrentMethod().Name.Replace("get_", ""), 
+                    MethodBase.GetCurrentMethod().DeclaringType.Name.Replace("PageObject", "")) ? go : null;
             }
         }
 
@@ -25,10 +27,11 @@ namespace MARSViking.Companion
         {
             get
             {
-                var go = GameObject.Find($"{LinkAccountScreenPath}/Scan View/Bottom ThreeRows/Row Middle/API Key Field/Input Field").GetComponent<TMP_InputField>();
-                if (go == null)
-                    Assert.Inconclusive("ApiKeyInputText on the LinkAccountScreen is missing");
-                return go;
+                var go = GameObject.Find($"{LinkAccountScreenPath}/Scan View/Bottom ThreeRows/Row Middle/API Key Field/Input Field");
+                return IsFound(
+                    go, 
+                    MethodBase.GetCurrentMethod().Name.Replace("get_", ""), 
+                    MethodBase.GetCurrentMethod().DeclaringType.Name.Replace("PageObject", "")) ? go.GetComponent<TMP_InputField>() : null;
             }
         }
 
@@ -36,10 +39,11 @@ namespace MARSViking.Companion
         {
             get
             {
-                var go = GameObject.Find($"{LinkAccountScreenPath}/Scan View/Bottom ThreeRows/Row Buttons/Button Rectangle").GetComponent<Button>();
-                if (go == null)
-                    Assert.Inconclusive("LinkAccountButton on the LinkAccountScreen is missing");
-                return go;
+                var go = GameObject.Find($"{LinkAccountScreenPath}/Scan View/Bottom ThreeRows/Row Buttons/Button Rectangle");
+                return IsFound(
+                    go, 
+                    MethodBase.GetCurrentMethod().Name.Replace("get_", ""), 
+                    MethodBase.GetCurrentMethod().DeclaringType.Name.Replace("PageObject", "")) ? go.GetComponent<Button>() : null;
             }
         }
     }
