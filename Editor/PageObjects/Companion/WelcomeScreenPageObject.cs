@@ -5,7 +5,7 @@ using UnityEngine.UI;
 // ReSharper disable once CheckNamespace
 namespace MARSViking.Companion
 {
-    public static class WelcomeScreenPo
+    public static class WelcomeScreenPageObject
     {
         private const string WelcomeScreenPath = "Menus/SafeArea/Welcome Screen";
 

@@ -6,7 +6,7 @@ using UnityEngine.UI;
 // ReSharper disable once CheckNamespace
 namespace MARSViking.Companion
 {
-    public static class ProjectListScreenPo
+    public static class ProjectListScreenPageObject
     {
         private const string ProjectListScreenPath = "Menus/SafeArea/ProjectListMenu";
 

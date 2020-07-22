@@ -6,7 +6,7 @@ using UnityEngine.UI;
 // ReSharper disable once CheckNamespace
 namespace MARSViking.Companion
 {
-    public static class LinkAccountScreenPo
+    public static class LinkAccountScreenPageObject
     {
         private const string LinkAccountScreenPath = "Menus/SafeArea/Link Account";
 

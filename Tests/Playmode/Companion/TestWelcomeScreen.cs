@@ -35,15 +35,15 @@ namespace MARSViking.Companion.Playmode
         [NUnit.Framework.Property("TestRailId", "649482")]
         public IEnumerator TestCanLinkCloudAccount()
         {
-            WelcomeScreenPo.WelcomeScreen.IsVisible();
-            WelcomeScreenPo.LinkAccountButton.Click();
+            WelcomeScreenPageObject.WelcomeScreen.IsVisible();
+            WelcomeScreenPageObject.LinkAccountButton.Click();
             
-            LinkAccountScreenPo.LinkAccountScreen.IsVisible();
+            LinkAccountScreenPageObject.LinkAccountScreen.IsVisible();
 
-            LinkAccountScreenPo.ApiKeyInputText.SetText("4a430aa47c5b65a3e60596d5edc91889");
-            LinkAccountScreenPo.LinkAccountButton.Click();
+            LinkAccountScreenPageObject.ApiKeyInputText.SetText("4a430aa47c5b65a3e60596d5edc91889");
+            LinkAccountScreenPageObject.LinkAccountButton.Click();
 
-            Assert.IsTrue(ProjectListScreenPo.ProjectListScreen.IsVisible());
+            Assert.IsTrue(ProjectListScreenPageObject.ProjectListScreen.IsVisible());
             yield return null;
         }
     }
