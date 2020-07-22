@@ -11,40 +11,13 @@ namespace MARSViking.Companion
     {
         private const string LinkAccountScreenPath = "Menus/SafeArea/Link Account";
 
-        public static GameObject LinkAccountScreen
-        {
-            get
-            {
-                var go = GameObject.Find($"{LinkAccountScreenPath}");
-                return IsFound(
-                    go, 
-                    MethodBase.GetCurrentMethod().Name.Replace("get_", ""), 
-                    MethodBase.GetCurrentMethod().DeclaringType.Name.Replace("PageObject", "")) ? go : null;
-            }
-        }
+        public static GameObject LinkAccountScreen => FindObject<GameObject>($"{LinkAccountScreenPath}");
 
-        public static TMP_InputField ApiKeyInputText
-        {
-            get
-            {
-                var go = GameObject.Find($"{LinkAccountScreenPath}/Scan View/Bottom ThreeRows/Row Middle/API Key Field/Input Field");
-                return IsFound(
-                    go, 
-                    MethodBase.GetCurrentMethod().Name.Replace("get_", ""), 
-                    MethodBase.GetCurrentMethod().DeclaringType.Name.Replace("PageObject", "")) ? go.GetComponent<TMP_InputField>() : null;
-            }
-        }
+        public static TMP_InputField ApiKeyInputText =>
+            FindObject<TMP_InputField>(
+                $"{LinkAccountScreenPath}/Scan View/Bottom ThreeRows/Row Middle/API Key Field/Input Field");
 
-        public static Button LinkAccountButton
-        {
-            get
-            {
-                var go = GameObject.Find($"{LinkAccountScreenPath}/Scan View/Bottom ThreeRows/Row Buttons/Button Rectangle");
-                return IsFound(
-                    go, 
-                    MethodBase.GetCurrentMethod().Name.Replace("get_", ""), 
-                    MethodBase.GetCurrentMethod().DeclaringType.Name.Replace("PageObject", "")) ? go.GetComponent<Button>() : null;
-            }
-        }
+        public static Button LinkAccountButton => FindObject<Button>($"{LinkAccountScreenPath}/Scan View/Bottom ThreeRows/Row Buttons/Button Rectangle");
+
     }
 }

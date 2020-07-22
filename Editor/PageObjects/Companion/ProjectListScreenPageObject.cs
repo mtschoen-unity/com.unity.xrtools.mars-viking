@@ -10,52 +10,13 @@ namespace MARSViking.Companion
     {
         private const string ProjectListScreenPath = "Menus/SafeArea/ProjectListMenu";
 
-        public static GameObject ProjectListScreen
-        {
-            get
-            {
-                var go = GameObject.Find(ProjectListScreenPath);
-                return IsFound(
-                    go, 
-                    MethodBase.GetCurrentMethod().Name.Replace("get_", ""), 
-                    MethodBase.GetCurrentMethod().DeclaringType.Name.Replace("PageObject", "")) ? go : null;
-            }
-        }
+        public static GameObject ProjectListScreen => FindObject<GameObject>(ProjectListScreenPath);
 
-        public static Button LinkAccountButton
-        {
-            get
-            {
-                var go = GameObject.Find($"{ProjectListScreenPath}/Header/Link Account Button");
-                return IsFound(
-                    go, 
-                    MethodBase.GetCurrentMethod().Name.Replace("get_", ""), 
-                    MethodBase.GetCurrentMethod().DeclaringType.Name.Replace("PageObject", "")) ? go.GetComponent<Button>() : null;
-            }
-        }
+        public static Button LinkAccountButton => FindObject<Button>($"{ProjectListScreenPath}/Header/Link Account Button");
 
-        public static TMP_Text LinkAccountButtonText
-        {
-            get
-            {
-                var go = GameObject.Find($"{ProjectListScreenPath}/Header/Link Account Button/Text");
-                return IsFound(
-                    go, 
-                    MethodBase.GetCurrentMethod().Name.Replace("get_", ""), 
-                    MethodBase.GetCurrentMethod().DeclaringType.Name.Replace("PageObject", "")) ? go.GetComponent<TMP_Text>() : null;
-            }
-        }
+        public static TMP_Text LinkAccountButtonText => FindObject<TMP_Text>($"{ProjectListScreenPath}/Header/Link Account Button/Text");
 
-        public static Button SelectButton
-        {
-            get
-            {
-                var go = GameObject.Find($"{ProjectListScreenPath}/Header/Select Button");
-                return IsFound(
-                    go, 
-                    MethodBase.GetCurrentMethod().Name.Replace("get_", ""), 
-                    MethodBase.GetCurrentMethod().DeclaringType.Name.Replace("PageObject", "")) ? go.GetComponent<Button>() : null;
-            }
-        }
+        public static Button SelectButton => FindObject<Button>($"{ProjectListScreenPath}/Header/Select Button");
+
     }
 }
