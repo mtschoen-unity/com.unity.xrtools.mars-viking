@@ -46,7 +46,7 @@ Windows_Companion_Tests:
     #- json -I -f C:\build\output\jasons-unity\com.unity.xrtools.mars-viking\testProject\Packages\manifest.json -e "this.registry='https://artifactory.prd.cds.internal.unity3d.com/artifactory/api/npm/upm-candidates'"
     #- git clone git@github.com:jasons-unity/com.unity.xrtools.mars-viking.git C:\build\output\jasons-unity\com.unity.xrtools.mars-viking\testProject\Packages\com.unity.xrtools.mars-viking && cd C:\build\output\jasons-unity\com.unity.xrtools.mars-viking\testProject\Packages\com.unity.xrtools.mars-viking && git checkout %GIT_BRANCH%
     - curl -s https://artifactory.internal.unity3d.com/core-automation/tools/utr-standalone/utr.bat --output utr.bat
-    - utr --suite=editor --suite=playmode --testproject=C:\build\output\jasons-unity\com.unity.xrtools.mars-viking\mars-companion-project --editor-location=C:\build\output\jasons-unity\com.unity.xrtools.mars-viking\.Editor --artifacts_path=C:\build\output\jasons-unity\com.unity.xrtools.mars-viking\test_results --testfilter=MARSViking.MARS
+    - utr --suite=editor --suite=playmode --testproject=C:\build\output\jasons-unity\com.unity.xrtools.mars-viking\mars-companion-project --editor-location=C:\build\output\jasons-unity\com.unity.xrtools.mars-viking\.Editor --artifacts_path=C:\build\output\jasons-unity\com.unity.xrtools.mars-viking\test_results --testfilter=MARSViking.Companion
   artifacts:
     test_results:
       paths:
@@ -74,7 +74,7 @@ Windows_MARS_Tests:
     #- json -I -f C:\build\output\jasons-unity\com.unity.xrtools.mars-viking\testProject\Packages\manifest.json -e "this.registry='https://artifactory.prd.cds.internal.unity3d.com/artifactory/api/npm/upm-candidates'"
     - git clone git@github.com:jasons-unity/com.unity.xrtools.mars-viking.git C:\build\output\jasons-unity\com.unity.xrtools.mars-viking\testProject\Packages\com.unity.xrtools.mars-viking && cd C:\build\output\jasons-unity\com.unity.xrtools.mars-viking\testProject\Packages\com.unity.xrtools.mars-viking && git checkout %GIT_BRANCH%
     - curl -s https://artifactory.internal.unity3d.com/core-automation/tools/utr-standalone/utr.bat --output utr.bat
-    - utr --suite=editor --suite=playmode --testproject=C:\build\output\jasons-unity\com.unity.xrtools.mars-viking\testProject --editor-location=C:\build\output\jasons-unity\com.unity.xrtools.mars-viking\.Editor --artifacts_path=C:\build\output\jasons-unity\com.unity.xrtools.mars-viking\test_results --testfilter=MARSViking.Companion
+    - utr --suite=editor --suite=playmode --testproject=C:\build\output\jasons-unity\com.unity.xrtools.mars-viking\testProject --editor-location=C:\build\output\jasons-unity\com.unity.xrtools.mars-viking\.Editor --artifacts_path=C:\build\output\jasons-unity\com.unity.xrtools.mars-viking\test_results --testfilter=MARSViking.MARS
   artifacts:
     test_results:
       paths:
