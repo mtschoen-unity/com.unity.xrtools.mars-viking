@@ -164,7 +164,6 @@ namespace MARSViking.MARS.Editor
         {
             AutomatedIMElement proxyObject;
             
-
             // Open Simulation View and Open the MarsPanel next to Inspector 
             // MARS Panel must be placed in position where it is fully extended so we can grab hold of UI elements
             EditorApplication.ExecuteMenuItem(Constants.WindowsMenu.OpenSimulationView);

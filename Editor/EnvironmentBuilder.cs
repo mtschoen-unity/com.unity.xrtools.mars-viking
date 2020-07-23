@@ -34,9 +34,8 @@ namespace MARSViking
             var newEnv = new GameObject();
             var settings = newEnv.AddComponent<MARSEnvironmentSettings>();
             var mySceneView = SceneView.lastActiveSceneView;
-
-            //TODO: below waiting on https://github.com/UnityLabs/mars-project/issues/750
-            //settings.EnvironmentInfo.EnvironmentBounds = new Bounds(new Vector3(0.99f, 5f, 1f), new Vector3(1f, 5f, 1f));
+            
+            settings.EnvironmentInfo.EnvironmentBounds = new Bounds(new Vector3(0.99f, 5f, 1f), new Vector3(1f, 5f, 1f));
 
             mySceneView.camera.transform.position = new Vector3(-0.164f, 0.834f, -0.350f);
             mySceneView.camera.transform.rotation = new Quaternion(0.298f, 0.339f, -0.113f, 0.884f);
@@ -141,8 +140,7 @@ namespace MARSViking
             string envlocalPath = "Assets/" + newEnv.name + ".prefab";
 
             envlocalPath = AssetDatabase.GenerateUniqueAssetPath(envlocalPath);
-            //TODO: below line waiting on https://github.com/UnityLabs/com.unity.labs.mars/pull/1138
-            PlanesExtractionManager.ExtractPlanes(planeExtractionSettings);
+            PlaneGenerationModule.ExtractPlanes(planeExtractionSettings);
 
             PrefabUtility.SaveAsPrefabAsset(newEnv, envlocalPath);
             var asset = AssetDatabase.LoadMainAssetAtPath(envlocalPath);
