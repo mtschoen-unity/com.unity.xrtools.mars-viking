@@ -1,16 +1,13 @@
 ﻿using System;
 using System.Collections;
 using NUnit.Framework;
-using UnityEditor;
-using UnityEditor.TestTools;
+using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.TestTools;
 
 namespace MARSViking.Companion.Playmode
 {
-    [TestFixture]
-    [RequirePlatformSupport(BuildTarget.Android)]
-    public class TestWelcomeScreen
+    public class TestProxy
     {
         [SetUp]
         public void SetUp()
@@ -31,18 +28,24 @@ namespace MARSViking.Companion.Playmode
 
         [UnityTest]
         [Category("Use Case")]
-        [NUnit.Framework.Property("TestRailId", "649482")]
-        public IEnumerator TestCanLinkCloudAccount()
+        [NUnit.Framework.Property("TestRailId", "")]
+        public IEnumerator TestCanSelectProxyFlow()
         {
             WelcomeScreenPageObject.WelcomeScreen.IsVisible();
-            WelcomeScreenPageObject.LinkAccountButton.Click();
-            
-            LinkAccountScreenPageObject.LinkAccountScreen.IsVisible();
 
-            LinkAccountScreenPageObject.ApiKeyInputText.SetText("4a430aa47c5b65a3e60596d5edc91889");
-            LinkAccountScreenPageObject.LinkAccountButton.Click();
+            WelcomeScreenPageObject.SkipButton.Click();
 
-            Assert.IsTrue(ProjectListScreenPageObject.ProjectListScreen.IsVisible());
+            ProjectListScreenPageObject.ProjectListScreen.IsVisible();
+
+            ProjectListScreenPageObject.CreateProjectButton.Click();
+            HomeScreenPageObject.HomeScreen.IsVisible();
+            HomeScreenPageObject.Content.IsVisible();
+            yield return new WaitForSeconds(1f);
+            HomeScreenPageObject.ProxyScanStartButton.Click();
+            yield return new WaitForSeconds(1f);
+            CameraMan.MoveTo();
+            yield return new WaitForSeconds(1f);
+
             yield return null;
         }
     }

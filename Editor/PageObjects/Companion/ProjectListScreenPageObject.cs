@@ -17,6 +17,7 @@ namespace MARSViking.Companion
         public static TMP_Text LinkAccountButtonText => FindObject<TMP_Text>($"{ProjectListScreenPath}/Header/Link Account Button/Text");
 
         public static Button SelectButton => FindObject<Button>($"{ProjectListScreenPath}/Header/Select Button");
-
+        public static Button CreateProjectButton => FindObject<Button>($"{ProjectListScreenPath}/Buttons/New Project Button");
+        
     }
 }

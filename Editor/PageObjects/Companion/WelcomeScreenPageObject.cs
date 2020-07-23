@@ -11,6 +11,6 @@ namespace MARSViking.Companion
         private const string WelcomeScreenPath = "Menus/SafeArea/Welcome Screen";
         public static GameObject WelcomeScreen => FindObject<GameObject>(WelcomeScreenPath);
         public static Button LinkAccountButton => FindObject<Button>($"{WelcomeScreenPath}/Link Account");
-
+        public static Button SkipButton => FindObject<Button>($"{WelcomeScreenPath}/Skip");
     }
 }

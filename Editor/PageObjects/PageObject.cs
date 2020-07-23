@@ -1,7 +1,9 @@
-﻿using System.Diagnostics;
+﻿using System.Collections.Generic;
+using System.Diagnostics;
 using System.Reflection;
 using NUnit.Framework;
 using TMPro;
+using UnityEditor;
 using UnityEngine;
 using UnityEngine.Analytics;
 using UnityEngine.UI;
@@ -33,6 +35,8 @@ namespace MARSViking.Companion
                     ? $"{userInterfaceElementName} is missing"
                     : $"{userInterfaceElementName} on the {screenName} is missing");
         }
+
+
     }
     public static class PageObjectExtensions
     {
@@ -50,5 +54,16 @@ namespace MARSViking.Companion
         {
             textField.text = text;
         }
+
+        public static void WaitForIsVisible(this GameObject go)
+        {
+            while (go.activeSelf == false)
+            {
+                EditorApplication.Step();
+                System.Threading.Thread.Sleep(1000);
+            }
+                
+        }
+        
     }
 }
