@@ -1,5 +1,64 @@
-Windows_Tests:
-  name: Windows 2019.3.0f6 Tests
+MacOS_Companion_Tests:
+  name: Companion MacOS 2019.3.0f6 Tests
+  agent:
+    type: Unity::VM::osx
+    image: package-ci/mac:stable
+    flavor: m1.mac
+  skip_checkout: true
+  commands:
+    - /Library/Application\ Support/Veertu/Anka/addons/change_res 1920x1080x72
+    - unity-downloader-cli -u 2019.3.0f6 -c Editor -c android --wait --published-only
+    - git clone --recursive git@github.com:UnityLabs/mars-companion-project.git
+    - git clone git@github.com:jasons-unity/com.unity.xrtools.mars-viking.git /Users/bokken/build/output/jasons-unity/com.unity.xrtools.mars-viking/mars-companion-project/Packages/com.unity.xrtools.mars-viking && cd /Users/bokken/build/output/jasons-unity/com.unity.xrtools.mars-viking/mars-companion-project/Packages/com.unity.xrtools.mars-viking && git checkout $GIT_BRANCH
+    #- .Editor/Unity.app/Contents/MacOS/Unity -createProject /Users/bokken/build/output/jasons-unity/com.unity.xrtools.mars-viking/testProject -quit
+    #- npm install -g json
+    #- json -I -f /Users/bokken/build/output/jasons-unity/com.unity.xrtools.mars-viking/testProject/Packages/manifest.json -e "this.registry='https://artifactory.prd.cds.internal.unity3d.com/artifactory/api/npm/upm-candidates'"
+    #- git clone git@github.com:jasons-unity/com.unity.xrtools.mars-viking.git /Users/bokken/build/output/jasons-unity/com.unity.xrtools.mars-viking/testProject/Packages/com.unity.xrtools.mars-viking && cd /Users/bokken/build/output/jasons-unity/com.unity.xrtools.mars-viking/testProject/Packages/com.unity.xrtools.mars-viking && git checkout $GIT_BRANCH
+    - curl -s https://artifactory.internal.unity3d.com/core-automation/tools/utr-standalone/utr --output utr
+    - chmod +x utr
+    - ./utr --suite=editor --suite=playmode --testproject=/Users/bokken/build/output/jasons-unity/com.unity.xrtools.mars-viking/mars-companion-project --editor-location=/Users/bokken/build/output/jasons-unity/com.unity.xrtools.mars-viking/.Editor --artifacts_path=/Users/bokken/build/output/jasons-unity/com.unity.xrtools.mars-viking/test_results --testfilter=MARSViking.Companion
+  artifacts:
+    test_results:
+      paths:
+        - "test_results/*/**"
+  triggers:
+    pull_requests:
+      - targets:
+          only:
+            - "master"
+
+Windows_Companion_Tests:
+  name: Companion Windows 2019.3.0f6 Tests
+  agent:
+    type: Unity::VM
+    flavor: b1.large
+    image: package-ci/win10:stable
+  skip_checkout: true
+  commands:
+    - powershell.exe -command Invoke-WebRequest -Uri http://bka.bokken.cloud/upload/Set-ScreenResolution.ps1  -OutFile (New-Item -Path "C:/Windows/system32/WindowsPowerShell/v1.0/Modules/Unity/Unity.psm1" -Force) -Verbose
+    - powershell.exe -command Cmd-RunInteractive -Command 'Set-ScreenResolution -Width 1920 -Height 1080' -Admin -PowerShellPrompt
+    - powershell.exe -command Start-Sleep -s 5;(Get-WmiObject -Class Win32_VideoController).VideoModeDescription
+    - unity-downloader-cli -u 2019.3.0f6 -c Editor -c android --wait --published-only
+    - git clone --recursive git@github.com:UnityLabs/mars-companion-project.git
+    - git clone git@github.com:jasons-unity/com.unity.xrtools.mars-viking.git C:\build\output\jasons-unity\com.unity.xrtools.mars-viking\mars-companion-project\Packages\com.unity.xrtools.mars-viking && cd C:\build\output\jasons-unity\com.unity.xrtools.mars-viking\mars-companion-project\Packages\com.unity.xrtools.mars-viking && git checkout %GIT_BRANCH%
+    #- .Editor\Unity.exe -createProject C:\build\output\jasons-unity\com.unity.xrtools.mars-viking\testProject -quit
+    #- npm install -g json
+    #- json -I -f C:\build\output\jasons-unity\com.unity.xrtools.mars-viking\testProject\Packages\manifest.json -e "this.registry='https://artifactory.prd.cds.internal.unity3d.com/artifactory/api/npm/upm-candidates'"
+    #- git clone git@github.com:jasons-unity/com.unity.xrtools.mars-viking.git C:\build\output\jasons-unity\com.unity.xrtools.mars-viking\testProject\Packages\com.unity.xrtools.mars-viking && cd C:\build\output\jasons-unity\com.unity.xrtools.mars-viking\testProject\Packages\com.unity.xrtools.mars-viking && git checkout %GIT_BRANCH%
+    - curl -s https://artifactory.internal.unity3d.com/core-automation/tools/utr-standalone/utr.bat --output utr.bat
+    - utr --suite=editor --suite=playmode --testproject=C:\build\output\jasons-unity\com.unity.xrtools.mars-viking\mars-companion-project --editor-location=C:\build\output\jasons-unity\com.unity.xrtools.mars-viking\.Editor --artifacts_path=C:\build\output\jasons-unity\com.unity.xrtools.mars-viking\test_results --testfilter=MARSViking.Companion
+  artifacts:
+    test_results:
+      paths:
+        - "test_results/*/**"
+  triggers:
+    pull_requests:
+      - targets:
+          only:
+            - "master"
+
+Windows_MARS_Tests:
+  name: MARS Windows 2019.3.0f6 Tests
   agent:
     type: Unity::VM
     flavor: b1.large
@@ -11,11 +70,11 @@ Windows_Tests:
     - powershell.exe -command Start-Sleep -s 5;(Get-WmiObject -Class Win32_VideoController).VideoModeDescription
     - unity-downloader-cli -u 2019.3.0f6 -c Editor --wait --published-only
     - .Editor\Unity.exe -createProject C:\build\output\jasons-unity\com.unity.xrtools.mars-viking\testProject -quit
-    - npm install -g json
-    - json -I -f C:\build\output\jasons-unity\com.unity.xrtools.mars-viking\testProject\Packages\manifest.json -e "this.registry='https://artifactory.prd.cds.internal.unity3d.com/artifactory/api/npm/upm-candidates'"
+    #- npm install -g json
+    #- json -I -f C:\build\output\jasons-unity\com.unity.xrtools.mars-viking\testProject\Packages\manifest.json -e "this.registry='https://artifactory.prd.cds.internal.unity3d.com/artifactory/api/npm/upm-candidates'"
     - git clone git@github.com:jasons-unity/com.unity.xrtools.mars-viking.git C:\build\output\jasons-unity\com.unity.xrtools.mars-viking\testProject\Packages\com.unity.xrtools.mars-viking && cd C:\build\output\jasons-unity\com.unity.xrtools.mars-viking\testProject\Packages\com.unity.xrtools.mars-viking && git checkout %GIT_BRANCH%
     - curl -s https://artifactory.internal.unity3d.com/core-automation/tools/utr-standalone/utr.bat --output utr.bat
-    - utr --suite=editor --suite=playmode --testproject=C:\build\output\jasons-unity\com.unity.xrtools.mars-viking\testProject --editor-location=C:\build\output\jasons-unity\com.unity.xrtools.mars-viking\.Editor --artifacts_path=C:\build\output\jasons-unity\com.unity.xrtools.mars-viking\test_results
+    - utr --suite=editor --suite=playmode --testproject=C:\build\output\jasons-unity\com.unity.xrtools.mars-viking\testProject --editor-location=C:\build\output\jasons-unity\com.unity.xrtools.mars-viking\.Editor --artifacts_path=C:\build\output\jasons-unity\com.unity.xrtools.mars-viking\test_results --testfilter=MARSViking.MARS
   artifacts:
     test_results:
       paths:
@@ -26,8 +85,8 @@ Windows_Tests:
           only:
             - "master"
 
-MacOS_Tests:
-  name: MacOS 2019.3.0f6 Tests
+MacOS_MARS_Tests:
+  name: MARS MacOS 2019.3.0f6 Tests
   agent:
     type: Unity::VM::osx
     image: package-ci/mac:stable
@@ -37,12 +96,12 @@ MacOS_Tests:
     - /Library/Application\ Support/Veertu/Anka/addons/change_res 1920x1080x72
     - unity-downloader-cli -u 2019.3.0f6 -c Editor --wait --published-only
     - .Editor/Unity.app/Contents/MacOS/Unity -createProject /Users/bokken/build/output/jasons-unity/com.unity.xrtools.mars-viking/testProject -quit
-    - npm install -g json
-    - json -I -f /Users/bokken/build/output/jasons-unity/com.unity.xrtools.mars-viking/testProject/Packages/manifest.json -e "this.registry='https://artifactory.prd.cds.internal.unity3d.com/artifactory/api/npm/upm-candidates'"
+    #- npm install -g json
+    #- json -I -f /Users/bokken/build/output/jasons-unity/com.unity.xrtools.mars-viking/testProject/Packages/manifest.json -e "this.registry='https://artifactory.prd.cds.internal.unity3d.com/artifactory/api/npm/upm-candidates'"
     - git clone git@github.com:jasons-unity/com.unity.xrtools.mars-viking.git /Users/bokken/build/output/jasons-unity/com.unity.xrtools.mars-viking/testProject/Packages/com.unity.xrtools.mars-viking && cd /Users/bokken/build/output/jasons-unity/com.unity.xrtools.mars-viking/testProject/Packages/com.unity.xrtools.mars-viking && git checkout $GIT_BRANCH
     - curl -s https://artifactory.internal.unity3d.com/core-automation/tools/utr-standalone/utr --output utr
     - chmod +x utr
-    - ./utr --suite=editor --suite=playmode --testproject=/Users/bokken/build/output/jasons-unity/com.unity.xrtools.mars-viking/testProject --editor-location=/Users/bokken/build/output/jasons-unity/com.unity.xrtools.mars-viking/.Editor --artifacts_path=/Users/bokken/build/output/jasons-unity/com.unity.xrtools.mars-viking/test_results
+    - ./utr --suite=editor --suite=playmode --testproject=/Users/bokken/build/output/jasons-unity/com.unity.xrtools.mars-viking/testProject --editor-location=/Users/bokken/build/output/jasons-unity/com.unity.xrtools.mars-viking/.Editor --artifacts_path=/Users/bokken/build/output/jasons-unity/com.unity.xrtools.mars-viking/test_results --testfilter=MARSViking.MARS
   artifacts:
     test_results:
       paths:
@@ -53,8 +112,8 @@ MacOS_Tests:
           only:
             - "master"
 
-Test_Trigger:
-  name: Tests Trigger
+MARS_Test_Trigger:
+  name: MARS Tests Trigger
   agent:
     type: Unity::VM
     image: package-ci/win10:stable
@@ -66,7 +125,21 @@ Test_Trigger:
       only:
       - /.*/
   dependencies:
-    - .yamato/run_tests.yml#Windows_Tests
-    - .yamato/run_tests.yml#MacOS_Tests
+    - .yamato/run_tests.yml#Windows_MARS_Tests
+    - .yamato/run_tests.yml#MacOS__MARS_Tests
 
-
+Companion_Test_Trigger:
+  name: Companion Tests Trigger
+  agent:
+    type: Unity::VM
+    image: package-ci/win10:stable
+    flavor: b1.large
+  commands:
+    - dir
+  triggers:
+    branches:
+      only:
+      - /.*/
+  dependencies:
+    - .yamato/run_tests.yml#Windows_Companion_Tests
+    - .yamato/run_tests.yml#MacOS_Companion_Tests

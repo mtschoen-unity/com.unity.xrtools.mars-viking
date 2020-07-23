@@ -1,8 +1,9 @@
-﻿﻿﻿using System.IO;
-  using System.Linq;
-  using UnityEditor;
-  using UnityEngine;
+﻿using System.IO;
+using System.Linq;
+using UnityEditor;
+using UnityEngine;
 
+// ReSharper disable once CheckNamespace
 namespace MARSViking
 {
     public class Init : MonoBehaviour
@@ -11,16 +12,36 @@ namespace MARSViking
         public static void SetupNewProject()
         {
             Debug.Log("Init Viking");
-            string ProjectRootPath = Directory.GetCurrentDirectory();
-            string ProjectManifestPath = Path.Combine(ProjectRootPath, "Packages", "manifest.json");
-            var lines = File.ReadAllLines(ProjectManifestPath).ToList();
+            
+            var projectRootPath = Directory.GetCurrentDirectory();
+            var projectManifestPath = Path.Combine(projectRootPath, "Packages", "manifest.json");
+            var lines = File.ReadAllLines(projectManifestPath).ToList();
+            var viking = lines.Find(l => l.Contains("com.unity.xrtools.mars-viking") && !l.Contains(":"));
+            
+            if (viking != null)
+            {
+                return;
+            }
             var testables  = lines.Find(l => l.Contains("testables"));
 
             if (testables != null && !testables.Contains("com.unity.xrtools.mars-viking"))
             {
                 var testablesIndex = lines.IndexOf(testables);
-                testables = testables.Replace("]", ",\"com.unity.xrtools.mars-viking\"]");
-                lines[testablesIndex] = testables;
+                var iterate = true;
+                while (iterate)
+                {
+                    if (lines[testablesIndex].Contains("]"))
+                    {
+                        lines[testablesIndex] = lines[testablesIndex].Replace("]", ",\"com.unity.xrtools.mars-viking\"]");
+                        iterate = false;
+                    }
+                    else
+                    {
+                        testablesIndex++;
+                    }
+                }
+
+                
             }
             
             if (testables == null)
@@ -29,7 +50,7 @@ namespace MARSViking
                 lines.Insert(lines.Count - 1, "\"testables\": [\"com.unity.xrtools.mars-viking\"]");
             }
 
-            File.WriteAllLines(ProjectManifestPath, lines);
+            File.WriteAllLines(projectManifestPath, lines);
             
         }
     }
