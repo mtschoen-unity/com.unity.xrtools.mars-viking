@@ -18,7 +18,6 @@ Named after NASA's Viking project which became the first US mission to land a sp
 ```
 
 ## Writing Test Cases
-### Unity Test Annotations
 
 
 ### Nunit Attributes and TestRail
@@ -35,10 +34,14 @@ Each test should also make use of the Category Nunit Attribute so that we can ru
 ```
 
 ### Types of tests
-#### Acceptance
+#### Automation Test
+##### PlayMode
+To view the results of each test step while the test is executing, add `yield return new WaitForSeconds(1f);` after each command which should display a visible change.
+
+##### Acceptance
 This type of test only requires the feature under test to be executed from the user interface.  All setup steps can be done in code while the step leading tot he assertion must be done using UIAutomation.  For example, if a Proxy setting is under test, the creation of the Proxy can be done with instantiating the object rather than using UI buttons but the setting must be updated by the user interface.
 
-#### Use case
+##### Use case
 This type of test requires all steps to go through the user interface as a user would execute each step.  Nothing should be instantiated via code.
 
 ### Constants
