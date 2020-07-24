@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Linq;
 using MARSViking.Companion;
 using NUnit.Framework;
 using TMPro;
@@ -21,9 +22,10 @@ namespace MARSViking.Companion
         public static GameObject Content =>
             FindObject<GameObject>($"{HomeScreenPath}/Common/Mode Switcher/Viewport/Content");
 
-        public static GameObject ProxyScanCard => Content.GetCarouselCard("Proxy Scan");
+        public static GameObject ProxyScanCard => FindObject<GameObject>($"{HomeScreenPath}/Common/Mode Switcher/Viewport/Content/Proxy Scan Card");
+        //public static List<GameObject> Cards => FindObjects<GameObject>($"{HomeScreenPath}/Common/Mode Switcher/Viewport/Content/Home View Card(Clone)");
 
-        public static Button ProxyScanStartButton => ProxyScanCard.GetComponentInChildren<Button>();
+        //public static Button ProxyScanStartButton => ProxyScanCard.GetComponentInChildren<Button>();
         
     }
 

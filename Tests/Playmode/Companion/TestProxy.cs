@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections;
+using System.Linq;
 using NUnit.Framework;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -40,11 +41,12 @@ namespace MARSViking.Companion.Playmode
             ProjectListScreenPageObject.CreateProjectButton.Click();
             HomeScreenPageObject.HomeScreen.IsVisible();
             HomeScreenPageObject.Content.IsVisible();
-            yield return new WaitForSeconds(1f);
-            HomeScreenPageObject.ProxyScanStartButton.Click();
-            yield return new WaitForSeconds(1f);
-            CameraMan.MoveTo();
-            yield return new WaitForSeconds(1f);
+            //yield return new WaitForSeconds(1f);
+            HomeScreenPageObject.ProxyScanCard.IsVisible();
+            //HomeScreenPageObject.ProxyScanStartButton.Click();
+            //yield return new WaitForSeconds(1f);
+            //yield return CameraMan.MoveTo();
+
 
             yield return null;
         }

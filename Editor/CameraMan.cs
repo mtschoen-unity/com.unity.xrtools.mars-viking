@@ -7,10 +7,24 @@ namespace MARSViking
     
     public class CameraMan
     {
-        public static void MoveTo()
+        public static IEnumerator MoveTo()
         {
             var camera = GameObject.Find("MARS Session/Main Camera");
-            camera.transform.position = Vector3.Lerp(camera.transform.position, new Vector3(0, 2, -0.01f), 1f);
+            var counter = 20;
+            while (!FoundSurface())
+            {
+                camera.transform.position += camera.transform.forward * 1 * Time.deltaTime;
+                yield return null;
+                System.Threading.Thread.Sleep(500);
+                counter--;
+            }
+           
+        }
+
+        private static bool FoundSurface()
+        {
+            var surfacesContainer = GameObject.Find("Spatial UI/Surfaces");
+            return surfacesContainer.transform.childCount > 0;
         }
     }
 }

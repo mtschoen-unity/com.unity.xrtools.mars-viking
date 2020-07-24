@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System.Collections;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.Reflection;
 using NUnit.Framework;
@@ -15,14 +16,23 @@ namespace MARSViking.Companion
     {
         protected static T FindObject<T>(string path)
         {
-            var go = GameObject.Find(path);
-            
+            object go = null;
+            var counter = 0;
+            while (go == null && counter < 10)
+            {
+                go = GameObject.Find(path);
+                EditorApplication.Step();
+                System.Threading.Thread.Sleep(1000);
+                counter++;
+            }
+
             if (go != null)
             {
                 if (typeof(T) == typeof(GameObject))
-                    return (T) (object) go;
+                    return (T) go;
                 
-                var component = go.GetComponent<T>();
+                var tempGo = (GameObject) go; 
+                var component = tempGo.GetComponent<T>();
                 if (component != null)
                     return component;
             }
@@ -55,15 +65,5 @@ namespace MARSViking.Companion
             textField.text = text;
         }
 
-        public static void WaitForIsVisible(this GameObject go)
-        {
-            while (go.activeSelf == false)
-            {
-                EditorApplication.Step();
-                System.Threading.Thread.Sleep(1000);
-            }
-                
-        }
-        
     }
 }
