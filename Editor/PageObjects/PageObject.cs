@@ -1,42 +1,43 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Diagnostics;
-using System.Reflection;
 using NUnit.Framework;
 using TMPro;
-using UnityEditor;
 using UnityEngine;
-using UnityEngine.Analytics;
 using UnityEngine.UI;
+using Debug = System.Diagnostics.Debug;
 
 // ReSharper disable once CheckNamespace
 namespace MARSViking.Companion
 {
     public class PageObject
     {
-        protected static T FindObject<T>(string path)
+        protected static IEnumerator<GameObject> FindGameObject(string path)
         {
-            object go = null;
+            var go = GameObject.Find(path);
             var counter = 0;
-            while (go == null && counter < 10)
+            while (go == null && counter++ < 10)
             {
-                go = GameObject.Find(path);
-                EditorApplication.Step();
-                System.Threading.Thread.Sleep(1000);
-                counter++;
+                yield return null;
             }
 
-            if (go != null)
+            yield return go;
+        }
+
+
+        protected static IEnumerator<T> FindObject<T>(string path) where T : Component
+        {
+            var enumerator = FindGameObject(path);
+            while (enumerator.Current == null && enumerator.MoveNext())
             {
-                if (typeof(T) == typeof(GameObject))
-                    return (T) go;
-                
-                var tempGo = (GameObject) go; 
-                var component = tempGo.GetComponent<T>();
-                if (component != null)
-                    return component;
+                yield return null;
             }
-            
+
+            var go = enumerator.Current;
+            if (go != null)
+                yield return go.GetComponent<T>();
+
             var stackTrace = new StackTrace();
             var userInterfaceElementName = stackTrace.GetFrame(1).GetMethod().Name.Replace("get_", "");
             var screenName = stackTrace.GetFrame(1).GetMethod().DeclaringType.Name.Replace("PageObject", "");
@@ -45,24 +46,40 @@ namespace MARSViking.Companion
                     ? $"{userInterfaceElementName} is missing"
                     : $"{userInterfaceElementName} on the {screenName} is missing");
         }
-
-
     }
     public static class PageObjectExtensions
     {
-        public static bool IsVisible(this GameObject go)
+        public static IEnumerator<bool> IsVisible(this IEnumerator<GameObject> go)
         {
-            return go.activeSelf;
+            while (go.Current == null && go.MoveNext())
+            {
+                yield return false;
+            }
+
+            Debug.Assert(go.Current != null, "Couldn't find gameObject");
+            yield return go.Current.activeSelf;
         }
 
-        public static void Click(this Button go)
+        public static IEnumerator Click(this IEnumerator<Button> go)
         {
-            go.onClick.Invoke();
+            while (go.Current == null && go.MoveNext())
+            {
+                yield return null;
+            }
+
+            Debug.Assert(go.Current != null, "Couldn't find gameObject");
+            go.Current.onClick.Invoke();
         }
 
-        public static void SetText(this TMP_InputField textField, string text)
+        public static IEnumerator SetText(this IEnumerator<TMP_InputField> textField, string text)
         {
-            textField.text = text;
+            while (textField.Current == null && textField.MoveNext())
+            {
+                yield return null;
+            }
+
+            Debug.Assert(textField.Current != null, "Couldn't find gameObject");
+            textField.Current.text = text;
         }
 
     }

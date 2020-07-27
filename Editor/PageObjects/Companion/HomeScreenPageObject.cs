@@ -15,18 +15,18 @@ namespace MARSViking.Companion
     {
         private const string HomeScreenPath = "Menus/SafeArea/Home";
 
-        public static GameObject HomeScreen => FindObject<GameObject>(HomeScreenPath);
+        public static IEnumerator<GameObject> HomeScreen => FindGameObject(HomeScreenPath);
 
-        public static GameObject ModeSwitcher => FindObject<GameObject>($"{HomeScreenPath}/Common/Mode Switcher");
+        public static IEnumerator<GameObject> ModeSwitcher => FindGameObject($"{HomeScreenPath}/Common/Mode Switcher");
 
-        public static GameObject Content =>
-            FindObject<GameObject>($"{HomeScreenPath}/Common/Mode Switcher/Viewport/Content");
+        public static IEnumerator<GameObject> Content =>
+            FindGameObject($"{HomeScreenPath}/Common/Mode Switcher/Viewport/Content");
 
-        public static GameObject ProxyScanCard => FindObject<GameObject>($"{HomeScreenPath}/Common/Mode Switcher/Viewport/Content/Proxy Scan Card");
+        public static IEnumerator<GameObject> ProxyScanCard => FindGameObject($"{HomeScreenPath}/Common/Mode Switcher/Viewport/Content/Proxy Scan Card");
         //public static List<GameObject> Cards => FindObjects<GameObject>($"{HomeScreenPath}/Common/Mode Switcher/Viewport/Content/Home View Card(Clone)");
 
         //public static Button ProxyScanStartButton => ProxyScanCard.GetComponentInChildren<Button>();
-        
+
     }
 
     public static class HomeScreenExtensions

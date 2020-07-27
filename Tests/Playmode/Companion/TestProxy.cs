@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections;
+using System.Collections.Generic;
 using System.Linq;
 using NUnit.Framework;
 using UnityEngine;
@@ -32,23 +33,34 @@ namespace MARSViking.Companion.Playmode
         [NUnit.Framework.Property("TestRailId", "")]
         public IEnumerator TestCanSelectProxyFlow()
         {
-            WelcomeScreenPageObject.WelcomeScreen.IsVisible();
+            var isVisible = WelcomeScreenPageObject.WelcomeScreen.IsVisible();
+            yield return isVisible;
+            Debug.Log($"Welcome screen is visible: {isVisible.Current}");
 
-            WelcomeScreenPageObject.SkipButton.Click();
+            yield return WelcomeScreenPageObject.SkipButton.Click();
 
-            ProjectListScreenPageObject.ProjectListScreen.IsVisible();
+            isVisible = ProjectListScreenPageObject.ProjectListScreen.IsVisible();
+            yield return isVisible;
+            Debug.Log($"Project list is visible: {isVisible.Current}");
 
-            ProjectListScreenPageObject.CreateProjectButton.Click();
-            HomeScreenPageObject.HomeScreen.IsVisible();
-            HomeScreenPageObject.Content.IsVisible();
+            yield return ProjectListScreenPageObject.CreateProjectButton.Click();
+
+            isVisible = HomeScreenPageObject.HomeScreen.IsVisible();
+            yield return isVisible;
+            Debug.Log($"Home screen is visible: {isVisible.Current}");
+
+            isVisible = HomeScreenPageObject.Content.IsVisible();
+            yield return isVisible;
+            Debug.Log($"Content is visible: {isVisible.Current}");
+
+            isVisible = HomeScreenPageObject.ProxyScanCard.IsVisible();
+            yield return isVisible;
+            Debug.Log($"Proxy Scan Card is visible: {isVisible.Current}");
+
             //yield return new WaitForSeconds(1f);
-            HomeScreenPageObject.ProxyScanCard.IsVisible();
             //HomeScreenPageObject.ProxyScanStartButton.Click();
             //yield return new WaitForSeconds(1f);
             //yield return CameraMan.MoveTo();
-
-
-            yield return null;
         }
     }
 }

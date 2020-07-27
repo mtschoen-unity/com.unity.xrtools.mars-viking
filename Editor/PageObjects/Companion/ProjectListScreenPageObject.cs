@@ -1,4 +1,5 @@
-﻿using System.Reflection;
+﻿using System.Collections.Generic;
+using System.Reflection;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -10,14 +11,14 @@ namespace MARSViking.Companion
     {
         private const string ProjectListScreenPath = "Menus/SafeArea/ProjectListMenu";
 
-        public static GameObject ProjectListScreen => FindObject<GameObject>(ProjectListScreenPath);
+        public static IEnumerator<GameObject> ProjectListScreen => FindGameObject(ProjectListScreenPath);
 
-        public static Button LinkAccountButton => FindObject<Button>($"{ProjectListScreenPath}/Header/Link Account Button");
+        public static IEnumerator<Button> LinkAccountButton => FindObject<Button>($"{ProjectListScreenPath}/Header/Link Account Button");
 
-        public static TMP_Text LinkAccountButtonText => FindObject<TMP_Text>($"{ProjectListScreenPath}/Header/Link Account Button/Text");
+        public static IEnumerator<TMP_Text> LinkAccountButtonText => FindObject<TMP_Text>($"{ProjectListScreenPath}/Header/Link Account Button/Text");
 
-        public static Button SelectButton => FindObject<Button>($"{ProjectListScreenPath}/Header/Select Button");
-        public static Button CreateProjectButton => FindObject<Button>($"{ProjectListScreenPath}/Buttons/New Project Button");
-        
+        public static IEnumerator<Button> SelectButton => FindObject<Button>($"{ProjectListScreenPath}/Header/Select Button");
+        public static IEnumerator<Button> CreateProjectButton => FindObject<Button>($"{ProjectListScreenPath}/Buttons/New Project Button");
+
     }
 }
